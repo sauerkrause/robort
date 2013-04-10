@@ -2,8 +2,8 @@
 
 (require :cl-irc)
 
-(load "settings.cl")
-(load "login-info.cl")
+(load "settings.lisp")
+(load "login-info.lisp")
 
 ;; need this as *logins* should be closed over for this.
 (defun get-connection (login)

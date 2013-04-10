@@ -1,0 +1,1 @@
+(defstruct login-info nick server)

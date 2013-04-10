@@ -1,6 +1,6 @@
 (require :cl-irc)
 
-(load "common-structs.lisp")
+(load "common-defs.lisp")
 
 (defun init-hooks (connection)
   (irc:add-hook connection 'irc::irc-privmsg-message

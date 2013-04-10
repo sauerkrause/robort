@@ -3,7 +3,7 @@
 (require :cl-irc)
 
 (load "settings.lisp")
-(load "common-structs.lisp")
+(load "common-defs.lisp")
 (load "init.lisp")
 
 ;; need this as *logins* should be closed over for this.
@@ -25,7 +25,7 @@
 (defun main ()
   (progn
     (load "settings.lisp")
-    (load "common-structs.lisp")
+    (load "common-defs.lisp")
     (load "init.lisp")
     (let ((connection (get-connection *login*)))
       (handler-case

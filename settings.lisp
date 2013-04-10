@@ -1,4 +1,4 @@
-(load "login-info.lisp")
+(load "common-structs.lisp")
 
 ;; Need to know at least nick and serv
 (defparameter *login*

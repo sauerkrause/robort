@@ -6,5 +6,8 @@
    :nick "robort"
    :server "irc.tamu.edu"))
 
-(defparameter *servers*
-  '("#bottest"))
+(defparameter *servers* ())
+(pushnew "#bottest" *servers* :test #'equal)
+(pushnew "#bottest2" *servers* :test #'equal)
+
+(print *servers*)

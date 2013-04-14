@@ -6,7 +6,7 @@
    :nick "robort"
    :server "irc.tamu.edu"))
 
-(defparameter *servers* ())
-(pushnew "#bottest2" *servers* :test #'equal)
-
-(print *servers*)
+;; set of channels
+(defparameter *channels* ())
+(pushnew "#bottest2" *channels* :test #'equal)
+(pushnew "#bottest" *channels* :test #'equal)

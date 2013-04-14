@@ -4,9 +4,8 @@
 (defparameter *login*
   (make-login-info
    :nick "robort"
-   :server "irc.tamu.edu"))
+   :server "irc.drwilco.net"))
 
 ;; set of channels
 (defparameter *channels* ())
-(pushnew "#bottest2" *channels* :test #'equal)
 (pushnew "#bottest" *channels* :test #'equal)

@@ -9,9 +9,13 @@
 				 (format s "~a " item)))))))
 			  
 	    (lambda (msg connection)
-	      (let 
-		  ((destination (first (irc:arguments msg))))
+	      (let*
+		  ((privmsg-p
+		    (not (char= (char (first (irc:arguments msg)) 0) #\#)))
+		   (destination (if privmsg-p 
+				    (irc:source msg)
+				  (first (irc:arguments msg)))))
 		(irc:privmsg connection 
-			     destination 
+			     destination  
 			     (get-message (rest-words 
 					   (cadr (irc::arguments msg)))))))))

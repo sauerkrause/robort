@@ -26,7 +26,7 @@
 		(funcall (gethash cmd-name *registered-commands*) msg connection)
 	      (progn 
 		(princ (cadr (irc::arguments msg)))
-		(irc:privmsg connection (irc:source msg)
+		(irc:notice connection (irc:source msg)
 			     (format nil "~a is not a valid command" cmd-name))))
 	  (princ ""))))))
 

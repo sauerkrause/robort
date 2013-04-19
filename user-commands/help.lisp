@@ -26,4 +26,4 @@
     (irc:privmsg 
      connection
      destination
-     (format nil "Checkout ^list-commands")))))
+     (format nil "Checkout ^list-commands"))))

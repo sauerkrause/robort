@@ -1,3 +1,5 @@
+;; Copyright 2013 Robert Allen Krause <robert.allen.krause@gmail.com>
+
 ;;     This file is part of Robort.
 
 ;;     Robort is free software: you can redistribute it and/or modify

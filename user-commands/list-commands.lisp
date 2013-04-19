@@ -15,7 +15,7 @@
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (require :cl-irc)
-
+;; will actually require code change. leaving as is for now.
 (setf (gethash "list-commands" *registered-commands*)
       (lambda (msg connection)
 	(let* ((word-list nil)

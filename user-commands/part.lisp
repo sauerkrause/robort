@@ -14,8 +14,11 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
 
-(setf (gethash "part" *registered-commands*)
-      (lambda (msg connection)
-	(irc:part connection (first (rest-words (cadr (irc::arguments msg)))))))
+(in-package :user-commands)
+
+(defun part (msg connection)
+	(irc:part connection 
+		  (first 
+		   (user-command-helpers::rest-words 
+		    (cadr (irc::arguments msg))))))

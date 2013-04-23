@@ -15,10 +15,10 @@
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (require :cl-irc)
+(in-package :user-commands)
 
-(setf (gethash "botsnack" *registered-commands*)
-      (lambda (msg connection)
-	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!"))
+(defun botsnack (msg connection)
+	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!" ":る"))
 	      (privmsg-p
 	       (not (char= (char (first (irc:arguments msg)) 0) #\#)))
 	      (destination (if privmsg-p 
@@ -26,4 +26,5 @@
 			     (first (irc:arguments msg)))))
 	  (irc:privmsg connection
 		       destination
-		       (elt responses (random (length responses)))))))
+		       (elt responses (random (length responses))))))
+(export 'botsnack)

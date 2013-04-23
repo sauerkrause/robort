@@ -16,14 +16,27 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (require :cl-irc)
 
+;; need a package for these helpers separate from the user-commands
+(defpackage :user-command-helpers
+  (:use :common-lisp)
+  (:export :first-word
+	   :rest-words))
+
+;; define a package we can shovel allo the things into.
+(defpackage :user-commands
+  (:use :common-lisp
+	:user-command-helpers))
+
+(in-package :user-command-helpers)
+
 (defun split-by-one-space (str)
   (loop for i = 0 then (1+ j)
 	as j = (position #\Space str :start i)
 	collect (subseq str i j)
 	while j))
 
-(defun first-word (str)
-  (car (split-by-one-space str)))
+(export (defun first-word (str)
+  (car (split-by-one-space str))))
 (defun rest-words (str)
   (cdr (split-by-one-space str)))
 
@@ -38,8 +51,8 @@
 	(if (char= (char cmd 0) #\^)
 	    (if (and (probe-file cmd-file-name)
 		     (load cmd-file-name)
-		     (gethash cmd-name *registered-commands*))
-		(funcall (gethash cmd-name *registered-commands*) msg connection)
+		     (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
+		(funcall (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands) msg connection)
 	      (progn 
 		(princ (cadr (irc::arguments msg)))
 		(irc:notice connection (irc:source msg)

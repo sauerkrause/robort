@@ -14,13 +14,19 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
+
+(defpackage :robort
+  (:use :common-lisp :common-lisp-user)
+  (:export :reinitialize
+	   :*registered-commands*))
+(in-package :robort)
+
 (ql:quickload "cl-irc")
 
 (require :cl-irc)
 
 (load "settings.lisp")
 (load "common-defs.lisp")
-(load "init.lisp")
 
 ;; need this as *logins* should be closed over for this.
 (defun get-connection (login)
@@ -31,11 +37,12 @@
      :server (login-info-server login)
      :nickname (login-info-nick login))))
 
-(defun reload (connection)
+(defun reinitialize (connection)
   (progn
     ;; Use quit, not die or disconnect.
     (irc:quit connection)
     (print "Died connection hopefully")))
+(export :reinitialize)
 
 ;; Entry point
 (defun main ()
@@ -48,7 +55,10 @@
        (progn
 	 (init connection)
 	 (irc:read-message-loop connection))
-       (reload-required () (reload connection))))))
+       (reinitialize-required () (reinitialize connection))))))
+
+(load "init.lisp")
+
 
 (loop
  (main))

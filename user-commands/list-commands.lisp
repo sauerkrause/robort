@@ -14,25 +14,39 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
+(in-package :user-commands)
 
-(setf (gethash "list-commands" *registered-commands*)
-      (lambda (msg connection)
+(defun list-commands (msg connection)
 	(let* ((word-list nil)
 	       (privmsg-p
 		(not (char= (char (first (irc:arguments msg)) 0) #\#)))
 	       (destination (if privmsg-p 
 				(irc:source msg)
 			      (first (irc:arguments msg)))))
-	  (progn
-	    (maphash (lambda (key value)
-		       (setf word-list (cons key word-list)))
-		     *registered-commands*)
-	    (irc:privmsg connection
-			 destination
-			 (if (listp word-list)
-			     (with-output-to-string 
-			       (s)
-			       (dolist (word (sort word-list #'string-lessp))
-				 (if (stringp word)
-				     (format s "~a " word))))))))))
+	  (labels ((symbol-internalp 
+		    (sym pkg)
+		    (multiple-value-bind
+		     (symbol status)
+		     (find-symbol (string sym) pkg)
+		     (eq status :internal)))
+		   (map-symbols (pkg fn)
+		    (do-external-symbols
+		     (key pkg)
+		     (funcall fn key nil))))
+		(progn
+		  (map-symbols :user-commands
+			       (lambda (key value)
+				 (setf word-list (cons (string key) word-list))))
+		  (print word-list)
+		  (print "hello world")
+		  (irc:privmsg connection
+			       destination
+			       (if (listp word-list)
+				   (with-output-to-string 
+				     (s)
+				     (dolist 
+					 (word 
+					  (sort word-list #'string-lessp))
+				       (if (stringp word)
+					   (format s "~a " word))))))))))
+(export 'list-commands)

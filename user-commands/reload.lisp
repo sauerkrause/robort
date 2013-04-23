@@ -14,10 +14,12 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-;; Note, must be loaded after user-commands.lisp
-(setf (gethash "reload" *registered-commands*) 
-      (lambda (msg connection)
-	(progn
-	  (format T "msg: ~a" msg)
-	  (print "Reloading")
-	  (reload connection))))
+
+(in-package :user-commands)
+ 
+(defun reload (msg connection)
+  (progn
+    (format T "msg: ~a" msg)
+    (print "Reloading")
+    (robort:reinitialize connection)))
+(export 'reload)

@@ -14,6 +14,10 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(setf (gethash "quit" *registered-commands*)
-      (lambda (msg connection)
-	(exit)))
+
+(in-package :user-commands)
+
+(defun quit (msg connection)
+  (progn 
+    (sb-ext:exit)))
+(export 'quit)

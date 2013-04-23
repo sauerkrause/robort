@@ -14,18 +14,18 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
+(in-package :user-commands)
 
-(setf (gethash "hi" *registered-commands*)
-      (lambda (msg connection)
-	(let* ((privmsg-p
-		(not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	       (destination (if privmsg-p 
-				(irc:source msg)
-			      (first (irc:arguments msg))))
-	       (nickname (irc:source msg))
-	       (reply (format nil "~aHi!" 
-			      (if (not privmsg-p)
-				  (format nil "~a: " nickname)
-				""))))
-	  (irc:privmsg connection destination reply))))
+(defun hi (msg connection)
+  (let* ((privmsg-p
+	  (not (char= (char (first (irc:arguments msg)) 0) #\#)))
+	 (destination (if privmsg-p 
+			  (irc:source msg)
+			(first (irc:arguments msg))))
+	 (nickname (irc:source msg))
+	 (reply (format nil "~aHi!" 
+			(if (not privmsg-p)
+			    (format nil "~a: " nickname)
+			  ""))))
+    (irc:privmsg connection destination reply)))
+(export 'hi)

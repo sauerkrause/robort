@@ -14,13 +14,12 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
-
-(ql:quickload "trivial-shell")
+(defvar *shell-loaded* (ql:quickload "trivial-shell"))
 (require :trivial-shell)
 
-(setf (gethash "fortune" *registered-commands*)
-      (lambda (msg connection)
+(in-package :user-commands)
+
+(defun fortune (msg connection)
 	(let* ((response (trivial-shell:shell-command "fortune"))
 	       (fortune-list
 		(loop for i = 0 then (1+ j)
@@ -38,7 +37,5 @@
 	      (irc:privmsg connection
 			   destination
 			   line)
-	      (sleep 0.5))))))
-	  ;; (irc:privmsg connection
-	  ;; 	       destination
-	  ;; 	       response))))
+	      (sleep 0.5)))))
+(export 'fortune)

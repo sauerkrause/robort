@@ -14,16 +14,16 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
+(in-package :user-commands)
 
-(setf (gethash "list" *registered-commands*)
-      (lambda (msg connection)
-	(let* ((privmsg-p
-		(not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	       (destination (if privmsg-p
-				(irc:source msg)
-			      (first (irc:arguments msg)))))
-	  (irc:privmsg 
-	   connection
-	   destination
-	   (format nil "(cons a (cons b (cons c ()))) ;; hyuk hyuk did you mean list-commands?")))))
+(defun botsmack (msg connection)
+	(let* ((responses (vector ":'(" ":C" "D:" "(ಥ_ಥ)" ":く" "ಠ_ಠ"))
+	      (privmsg-p
+	       (not (char= (char (first (irc:arguments msg)) 0) #\#)))
+	      (destination (if privmsg-p 
+			       (irc:source msg)
+			     (first (irc:arguments msg)))))
+	  (irc:privmsg connection
+		       destination
+		       (elt responses (random (length responses))))))
+(export 'botsmack)

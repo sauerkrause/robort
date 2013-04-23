@@ -21,10 +21,7 @@
 (load "user-commands/reload.lisp")
 (defun init-hooks (connection)
   (irc:add-hook connection 'irc::irc-privmsg-message
-		(handle-command connection)))
-  	    ;; #'(lambda (msg)
-	    ;; 	(print msg)
-  	    ;; 	(error 'reload-required))))
+		(user-command-helpers::handle-command connection)))
 
 ;; Do anything that needs to be done prior to reading the loops here.
 (defun init (connection)

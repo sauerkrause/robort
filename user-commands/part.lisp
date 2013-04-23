@@ -22,3 +22,4 @@
 		  (first 
 		   (user-command-helpers::rest-words 
 		    (cadr (irc::arguments msg))))))
+(export 'part)

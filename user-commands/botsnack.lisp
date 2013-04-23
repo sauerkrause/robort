@@ -26,3 +26,4 @@
 	  (irc:privmsg connection
 		       destination
 		       (elt responses (random (length responses))))))
+(export 'botsnack)

@@ -21,3 +21,4 @@
   (irc:join connection 
 	    (first 
 	     (user-command-helpers::rest-words (cadr (irc::arguments msg))))))
+(export 'join)

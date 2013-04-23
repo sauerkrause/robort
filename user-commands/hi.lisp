@@ -28,3 +28,4 @@
 			    (format nil "~a: " nickname)
 			  ""))))
     (irc:privmsg connection destination reply)))
+(export 'hi)

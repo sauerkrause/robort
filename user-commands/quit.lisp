@@ -20,3 +20,4 @@
 (defun quit (msg connection)
   (progn 
     (sb-ext:exit)))
+(export 'quit)

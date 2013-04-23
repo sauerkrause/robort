@@ -39,3 +39,4 @@
 			   destination
 			   line)
 	      (sleep 0.5)))))
+(export 'fortune)

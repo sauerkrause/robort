@@ -27,3 +27,4 @@
      connection
      destination
      (format nil "Checkout ^list-commands"))))
+(export 'help)

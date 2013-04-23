@@ -27,6 +27,21 @@
   (:use :common-lisp
 	:user-command-helpers))
 
+(in-package :cl-user)
+
+(defun define-command (name args &rest body)
+  `(defun name ',args ,body)
+  (export :name))
+;;(defmacro define-command (name args &body body)
+;;  `(defun name ,args ,@body)
+;;  `(export 'name))
+
+;; (defmacro define-command (name args &body body)
+;;   `(progn 
+;;      (defun name ,args ,@body)
+;;      (export 'name)))
+(export 'define-command)
+
 (in-package :user-command-helpers)
 
 (defun split-by-one-space (str)

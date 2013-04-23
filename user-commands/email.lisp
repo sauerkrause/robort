@@ -59,3 +59,4 @@
 			  :authentication (list *username* *password*)))
 		    (irc:privmsg connection (first (irc:arguments msg)) "ERROR: success")
 		  (reply connection source "SUCCESS: failed")))))
+(export 'email)

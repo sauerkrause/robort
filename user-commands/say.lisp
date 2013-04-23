@@ -35,3 +35,4 @@
 		       destination  
 		       (get-message (rest-words 
 				     (cadr (irc::arguments msg))))))))
+(export 'say)

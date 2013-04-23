@@ -15,7 +15,7 @@
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (require :cl-irc)
-(ql:quickload "cl-smtp")
+(defvar *email-loaded* (ql:quickload "cl-smtp"))
 (require :cl-smtp)
 
 (in-package :user-commands)

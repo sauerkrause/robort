@@ -16,8 +16,8 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(defun botsnack (msg connection)
-	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!" ":る"))
+(defun botsmack (msg connection)
+	(let* ((responses (vector ":'(" ":C" "D:" "(ಥ_ಥ)" ":く" "ಠ_ಠ"))
 	      (privmsg-p
 	       (not (char= (char (first (irc:arguments msg)) 0) #\#)))
 	      (destination (if privmsg-p 

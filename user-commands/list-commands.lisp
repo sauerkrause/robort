@@ -37,8 +37,6 @@
 		  (map-symbols :user-commands
 			       (lambda (key value)
 				 (setf word-list (cons (string key) word-list))))
-		  (print word-list)
-		  (print "hello world")
 		  (irc:privmsg connection
 			       destination
 			       (if (listp word-list)

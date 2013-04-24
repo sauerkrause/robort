@@ -19,5 +19,5 @@
 
 (defun quit (msg connection)
   (progn 
-    (sb-ext:exit)))
+    (cl-user::quit)))
 (export 'quit)

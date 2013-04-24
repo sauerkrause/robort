@@ -16,9 +16,7 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 
 (defpackage :robort
-  (:use :common-lisp :common-lisp-user)
-  (:export :reinitialize
-	   :*registered-commands*))
+  (:use :common-lisp :common-lisp-user))
 (in-package :robort)
 
 (ql:quickload "cl-irc")
@@ -42,7 +40,7 @@
     ;; Use quit, not die or disconnect.
     (irc:quit connection)
     (print "Died connection hopefully")))
-(export :reinitialize)
+(export 'reinitialize)
 
 ;; Entry point
 (defun main ()

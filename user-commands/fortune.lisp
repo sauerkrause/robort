@@ -20,7 +20,7 @@
 (in-package :user-commands)
 
 (defun fortune (msg connection)
-	(let* ((response (trivial-shell:shell-command "fortune"))
+	(let* ((response (trivial-shell:shell-command "fortune -s"))
 	       (fortune-list
 		(loop for i = 0 then (1+ j)
 		      as j = (position #\linefeed response :start i)

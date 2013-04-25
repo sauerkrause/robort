@@ -16,7 +16,7 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(define source (msg connection)
+(define source-code (msg connection)
     (let* ((privmsg-p
 	  (not (char= (char (first (irc:arguments msg)) 0) #\#)))
 	 (destination (if privmsg-p 
@@ -26,4 +26,4 @@
 	 (reply (format nil "Freedom @ https://github.com/sauerkrause/robort")))
     (irc:privmsg connection destination reply)))
 
-(export 'source)
+(export 'source-code)

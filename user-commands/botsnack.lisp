@@ -18,13 +18,21 @@
 (in-package :user-commands)
 
 (defun botsnack (msg connection)
-	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!" ":る"))
+	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!" ":る" 'fortune))
 	      (privmsg-p
 	       (not (char= (char (first (irc:arguments msg)) 0) #\#)))
 	      (destination (if privmsg-p 
 			       (irc:source msg)
-			     (first (irc:arguments msg)))))
-	  (irc:privmsg connection
-		       destination
-		       (elt responses (random (length responses))))))
+			     (first (irc:arguments msg))))
+	      (response (elt responses (random (length responses)))))
+	  (if (eq response 'fortune)
+	      (progn
+		(irc:privmsg connection
+			     destination
+			     "*Cough* This snack contains a secret message from the land of the orient")
+		(sleep 0.5)
+		(fortune msg connection))
+	    (irc:privmsg connection
+			 destination
+			 response))))
 (export 'botsnack)

@@ -29,6 +29,8 @@
 
 (in-package :user-command-helpers)
 
+(define-condition flooped-command (error) nil)
+
 (defun split-by-one-space (str)
   (loop for i = 0 then (1+ j)
 	as j = (position #\Space str :start i)
@@ -52,7 +54,12 @@
 	    (if (and (probe-file cmd-file-name)
 		     (load cmd-file-name)
 		     (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
-		(funcall (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands) msg connection)
+		(handler-case
+		 (funcall (find-symbol 
+			   (common-lisp:string-upcase cmd-name) 
+			   'user-commands) msg connection)
+		 (flooped-command () (irc:notice connection (irc:source msg)
+						 (format nil "Invalid usage of command: ~a" cmd-name))))
 	      (progn 
 		(princ (cadr (irc::arguments msg)))
 		(irc:notice connection (irc:source msg)

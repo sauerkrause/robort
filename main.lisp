@@ -42,18 +42,19 @@
     (print "Died connection hopefully")))
 (export 'reinitialize)
 
+(defparameter *connection* nil)
 ;; Entry point
 (defun main ()
   (progn
     (load "settings.lisp")
     (load "common-defs.lisp")
     (load "init.lisp")
-    (let ((connection (get-connection *login*)))
-      (handler-case
-       (progn
-	 (init connection)
-	 (irc:read-message-loop connection))
-       (reinitialize-required () (reinitialize connection))))))
+    (defparameter *connection* (get-connection *login*))
+    (handler-case
+     (progn
+       (init *connection*)
+       (irc:read-message-loop *connection*))
+     (reinitialize-required () (reinitialize *connection*)))))
 
 (load "init.lisp")
 

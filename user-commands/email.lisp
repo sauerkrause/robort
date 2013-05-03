@@ -27,15 +27,10 @@
 ;; *username* string
 ;; *password* string
 (load "configs/email-conf.lisp")
-(setf cl-smtp::*debug* t)
+(load "user-commands/common.lisp")
+
 (defun email (msg connection)
-  (flet ((get-message (list)
-		      (if (listp list)
-			  (with-output-to-string (s)
-						 (dolist (item list)
-							 (if (stringp item)
-							     (format s "~a " item))))))
-	 (reply (connection destination message)
+  (flet ((reply (connection destination message)
 		(irc:notice connection destination message)))
 	(let* ((source (irc:source msg))
 	       (subject-line (format nil "Message from ~a" source))
@@ -43,20 +38,28 @@
 		(user-command-helpers:first-word 
 		 (get-message 
 		  (user-command-helpers:rest-words (cadr (irc:arguments msg))))))
+	       (word-list (rest-words (get-message (rest-words (cadr (irc::arguments msg))))))
 	       (content 
 		(format 
 		 nil 
 		 "~a~%~%~% - Brought to you by robort (tm)" 
-		 (get-message (rest-words (get-message (rest-words (cadr (irc::arguments msg)))))))))
-		(if (not (cl-smtp:send-email 
-			  *smtp-server*
-			  *email-address*
-			  destination
-			  subject-line
-			  content
-			  :ssl *ssl-p*
-			  :port *smtp-port*
-			  :authentication (list *username* *password*)))
-		    (irc:privmsg connection (first (irc:arguments msg)) "ERROR: success")
-		  (reply connection source "SUCCESS: failed")))))
+		 (get-message word-list))))
+	  (when (or (not destination) (not word-list))
+	    (error 'user-command-helpers::flooped-command))
+	  (princ word-list)
+	  (if (and 
+	       destination
+	       word-list
+	       (not (cl-smtp:send-email 
+		     *smtp-server*
+		     *email-address*
+		     destination
+		     subject-line
+		     content
+		     :ssl *ssl-p*
+		     :port *smtp-port*
+		     :authentication (list *username* *password*))))
+	      (irc:privmsg connection 
+			   (first (irc:arguments msg)) "ERROR: success")
+	    (reply connection source "SUCCESS: failed")))))
 (export 'email)

@@ -14,16 +14,20 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
+(require :cl-irc)
+
 (in-package :user-commands)
 
-(defun join (msg connection)
-  (let ((channel
-	 (first (user-command-helpers::rest-words
-		 (cadr (irc::arguments msg))))))
-    (if channel
-	(irc:join connection 
-		  (first 
-		   (user-command-helpers::rest-words (cadr (irc::arguments msg))))))
-      (error 'user-command-helpers::flooped-command)))
+(defun get-message (list)
+  (if (listp list)
+      (with-output-to-string (s)
+			     (dolist (item list)
+			       (if (stringp item)
+				   (format s "~a " item))))))
 
-(export 'join)
+(defun privmsgp (msg)
+  (not (char= (char (first (irc:arguments msg)) 0) #\#)))
+(defun get-destination (msg)
+  (if (privmsgp msg)
+      (irc:source msg)
+    (first (irc:arguments msg))))

@@ -44,22 +44,21 @@
 		 nil 
 		 "~a~%~%~% - Brought to you by robort (tm)" 
 		 (get-message word-list))))
-	  (when (or (not destination) (not word-list))
-	    (error 'user-command-helpers::flooped-command))
-	  (princ word-list)
-	  (if (and 
-	       destination
-	       word-list
-	       (not (cl-smtp:send-email 
-		     *smtp-server*
-		     *email-address*
-		     destination
-		     subject-line
-		     content
-		     :ssl *ssl-p*
-		     :port *smtp-port*
-		     :authentication (list *username* *password*))))
-	      (irc:privmsg connection 
-			   (first (irc:arguments msg)) "ERROR: success")
-	    (reply connection source "SUCCESS: failed")))))
+	  (if (or (not destination) (not word-list))
+	      (error 'user-command-helpers::flooped-command)
+	    (if (and 
+		 destination
+		 word-list
+		 (not (cl-smtp:send-email 
+		       *smtp-server*
+		       *email-address*
+		       destination
+		       subject-line
+		       content
+		       :ssl *ssl-p*
+		       :port *smtp-port*
+		       :authentication (list *username* *password*))))
+		(irc:privmsg connection 
+			     (first (irc:arguments msg)) "ERROR: success")
+	      (reply connection source "SUCCESS: failed"))))))
 (export 'email)

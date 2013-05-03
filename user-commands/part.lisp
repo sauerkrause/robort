@@ -25,6 +25,6 @@
 	(irc:part connection 
 		  (first
 		   (user-command-helpers::rest-words
-		    (cadr (irc::arguments msg))))))
-  (error 'user-command-helpers::flooped-command)))
+		    (cadr (irc::arguments msg)))))
+    (error 'user-command-helpers::flooped-command))))
 (export 'part)

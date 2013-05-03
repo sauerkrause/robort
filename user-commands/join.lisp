@@ -20,10 +20,11 @@
   (let ((channel
 	 (first (user-command-helpers::rest-words
 		 (cadr (irc::arguments msg))))))
+    (princ channel)
     (if channel
 	(irc:join connection 
 		  (first 
-		   (user-command-helpers::rest-words (cadr (irc::arguments msg))))))
-      (error 'user-command-helpers::flooped-command)))
+		   (user-command-helpers::rest-words (cadr (irc::arguments msg)))))
+      (error 'user-command-helpers::flooped-command))))
 
 (export 'join)

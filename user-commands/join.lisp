@@ -20,7 +20,6 @@
   (let ((channel
 	 (first (user-command-helpers::rest-words
 		 (cadr (irc::arguments msg))))))
-    (princ channel)
     (if channel
 	(irc:join connection 
 		  (first 

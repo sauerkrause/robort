@@ -18,11 +18,6 @@
 
 (load "user-commands/common.lisp")
 
-(defun hi (msg connection)
-  (let* ((nickname (irc:source msg))
-	 (reply (format nil "~aHi!" 
-			(if (not (privmsgp msg))
-			    (format nil "~a: " nickname)
-			  ""))))
-    (irc:privmsg connection (get-destination msg) reply)))
-(export 'hi)
+(defun ping (msg connection)
+    (irc:privmsg connection (get-destination msg) "PONG!"))
+(export 'ping)

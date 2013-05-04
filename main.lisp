@@ -35,6 +35,10 @@
      :server (login-info-server login)
      :nickname (login-info-nick login))))
 
+(defun fix-screwup ()
+  (reinitialize *connection*)
+  (main))
+
 (defun reinitialize (connection)
   (progn
     ;; Use quit, not die or disconnect.

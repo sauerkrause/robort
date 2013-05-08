@@ -42,16 +42,15 @@
 (defun rest-words (str)
   (cdr (split-by-one-space str)))
 
-(defparameter *registered-commands* (make-hash-table :test #'equal))
-
 (defun handle-command(connection)
   (lambda (msg)
     (when (> (length (cadr (irc::arguments msg))) 1)
       (progn
-	(let* ((cmd (first-word (cadr (irc::arguments msg))))
-	       (cmd-name (subseq cmd 1))
-	       (cmd-file-name (format nil "user-commands/~a.lisp" cmd-name)))
+	(let ((cmd (first-word (cadr (irc::arguments msg)))))
 	  (when (and (> (length cmd) 1) (char= (char cmd 0) #\^))
+	    (let* ((cmd-name (subseq cmd 1))
+		   (cmd-file-name (format nil "user-commands/~a.lisp"
+					  cmd-name)))
 	      (if (and (probe-file cmd-file-name)
 		       (load cmd-file-name)
 		       (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
@@ -59,12 +58,14 @@
 		   (funcall (find-symbol 
 			     (common-lisp:string-upcase cmd-name) 
 			     'user-commands) msg connection)
-		   (flooped-command () (irc:notice connection (irc:source msg)
-						   (format nil "Invalid usage of command: ~a" cmd-name))))
+		   (flooped-command 
+		    ()(irc:notice connection (irc:source msg)
+				  (format nil "Invalid usage of command: ~a" 
+					  cmd-name))))
 		(progn 
 		  (princ (cadr (irc::arguments msg)))
 		  (irc:notice connection (irc:source msg)
-			      (format nil "~a is not a valid command" cmd-name))))))))))
+			      (format nil "~a is not a valid command" cmd-name)))))))))))
 
 ;; this will walk the .lisp files in user-commands/
 ;; it should register each file it finds with a hash map.

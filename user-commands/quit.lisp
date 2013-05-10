@@ -17,7 +17,10 @@
 
 (in-package :user-commands)
 
+(load "user-commands/identification.lisp")
+
 (defun quit (msg connection)
-  (progn 
-    (cl-user::quit)))
+  (let ((nickname (irc:source msg)))
+    (if (priviligedp nickname)
+	(cl-user::quit))))
 (export 'quit)

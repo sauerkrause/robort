@@ -17,13 +17,8 @@
 (in-package :user-commands)
 
 (defun source (msg connection)
-    (let* ((privmsg-p
-	  (not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	 (destination (if privmsg-p 
-			  (irc:source msg)
-			(first (irc:arguments msg))))
-	 (nickname (irc:source msg))
-	 (reply (format nil "Freedom @ https://github.com/sauerkrause/robort")))
-    (irc:privmsg connection destination reply)))
+    (let ((reply 
+	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
+      (irc:privmsg connection (get-destination msg) reply)))
 
 (export 'source)

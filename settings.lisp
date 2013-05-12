@@ -24,7 +24,7 @@
 
 ;; set of channels
 (defparameter *channels* ())
-(pushnew "#bottest" *channels* :test #'equal)
+(pushnew "#bottest2" *channels* :test #'equal)
 
 ;; character to use for command prefix
 (defparameter *prefix* #\#)

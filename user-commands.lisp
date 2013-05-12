@@ -37,6 +37,8 @@
 
 (defparameter *protected-functions* (make-hash-table))
 
+(defvar *ignore-map* (make-hash-table))
+
 (defun needs-auth (fnsym)
   (gethash fnsym user-command-helpers::*protected-functions*))
 

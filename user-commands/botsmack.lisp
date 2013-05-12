@@ -17,13 +17,8 @@
 (in-package :user-commands)
 
 (defun botsmack (msg connection)
-	(let* ((responses (vector ":'(" ":C" "D:" "(ಥ_ಥ)" ":く" "ಠ_ಠ"))
-	      (privmsg-p
-	       (not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	      (destination (if privmsg-p 
-			       (irc:source msg)
-			     (first (irc:arguments msg)))))
+	(let* ((responses (vector ":'(" ":C" "D:" "(ಥ_ಥ)" ":く" "ಠ_ಠ")))
 	  (irc:privmsg connection
-		       destination
+		       (get-destination msg)
 		       (elt responses (random (length responses))))))
 (export 'botsmack)

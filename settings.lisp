@@ -19,7 +19,7 @@
 ;; Need to know at least nick and serv
 (defparameter *login*
   (make-login-info
-   :nick "robort"
+   :nick "robortMk2"
    :server "irc.drwilco.net"))
 
 ;; set of channels
@@ -27,4 +27,4 @@
 (pushnew "#bottest" *channels* :test #'equal)
 
 ;; character to use for command prefix
-(defparameter *prefix* #\^)
+(defparameter *prefix* #\#)

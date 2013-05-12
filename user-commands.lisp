@@ -43,7 +43,6 @@
   (gethash fnsym user-command-helpers::*protected-functions*))
 
 (defun register-auth (fnsym)
-  (princ fnsym)
   (setf (gethash fnsym user-command-helpers::*protected-functions*) fnsym))
 
 (defun priviligedp (nick)

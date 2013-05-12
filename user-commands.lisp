@@ -37,6 +37,8 @@
 
 (defparameter *protected-functions* (make-hash-table))
 
+(defvar *ignore-map* (make-hash-table))
+
 (defun needs-auth (fnsym)
   (gethash fnsym user-command-helpers::*protected-functions*))
 
@@ -61,7 +63,8 @@
 
 (defun handle-command(connection)
   (lambda (msg)
-    (when (> (length (cadr (irc::arguments msg))) 1)
+    (when (and (not (gethash (irc:source msg) *ignore-map* :test #'equal))
+	   (> (length (cadr (irc::arguments msg))) 1))
       (progn
 	(flet ((notice (message) (irc:notice connection (irc:source msg) message)))
 	(let ((cmd (first-word (cadr (irc::arguments msg)))))

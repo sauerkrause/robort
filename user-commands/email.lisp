@@ -59,6 +59,7 @@
 		       :port *smtp-port*
 		       :authentication (list *username* *password*))))
 		(irc:privmsg connection 
-			     (first (irc:arguments msg)) "ERROR: success")
+			     (get-destination msg) "ERROR: success")
 	      (reply connection source "SUCCESS: failed"))))))
+(register-auth #'email)
 (export 'email)

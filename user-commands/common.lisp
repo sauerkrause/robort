@@ -31,3 +31,6 @@
   (if (privmsgp msg)
       (irc:source msg)
     (first (irc:arguments msg))))
+
+(defun get-nick (msg)
+  (irc:source msg))

@@ -20,6 +20,6 @@
 (defun quit (msg connection)
 	(cl-user::quit))
 
-(user-command-helpers:register-auth #'quit)
+(register-auth #'quit)
 
 (export 'quit)

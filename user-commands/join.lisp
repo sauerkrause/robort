@@ -25,5 +25,5 @@
 		  (first 
 		   (user-command-helpers::rest-words (cadr (irc::arguments msg)))))
       (error 'user-command-helpers::flooped-command))))
-
+(register-auth #'join)
 (export 'join)

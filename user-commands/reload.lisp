@@ -1,4 +1,4 @@
-;; Copyright 2013 Robert Allen Krause <robert.allen.krause@gmail.com>
+ ;; Copyright 2013 Robert Allen Krause <robert.allen.krause@gmail.com>
 
 ;;     This file is part of Robort.
 
@@ -23,6 +23,6 @@
     (print "Reloading")
     (robort::fix-screwup)))
 
-(user-command-helpers:register-auth #'reload)
+(register-auth #'reload)
 
 (export 'reload)

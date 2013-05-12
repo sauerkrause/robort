@@ -19,20 +19,16 @@
 
 (defun botsnack (msg connection)
 	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!" ":る" 'fortune))
-	      (privmsg-p
-	       (not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	      (destination (if privmsg-p 
-			       (irc:source msg)
-			     (first (irc:arguments msg))))
-	      (response (elt responses (random (length responses)))))
-	  (if (eq response 'fortune)
-	      (progn
-		(irc:privmsg connection
-			     destination
-			     "*Cough* This snack contains a secret message from the land of the orient")
-		(sleep 0.5)
-		(fortune msg connection))
+	       (response (elt responses (random (length responses))))
+	       (fortunep (eq response 'fortune)))
+	  (progn
 	    (irc:privmsg connection
-			 destination
-			 response))))
+			 (get-destination msg)
+			 (format nil "~a" (if fortunep
+					      "*Cough* This snack contains a secret message from the land of the orient"
+					    response)))
+	    (when fortunep 
+	      (sleep 0.1)
+	      (fortune msg connection)))))
+
 (export 'botsnack)

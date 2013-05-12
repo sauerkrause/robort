@@ -25,17 +25,11 @@
 		(loop for i = 0 then (1+ j)
 		      as j = (position #\linefeed response :start i)
 		      collect (subseq response i j)
-		      while j))
-	       (privmsg-p
-	       (not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	      (destination (if privmsg-p 
-			       (irc:source msg)
-			     (first (irc:arguments msg)))))
-	  (print response)
+		      while j)))
 	  (dolist (line fortune-list)
 	    (progn
 	      (irc:privmsg connection
-			   destination
+			   (get-destination msg)
 			   line)
 	      (sleep 0.5)))))
 (export 'fortune)

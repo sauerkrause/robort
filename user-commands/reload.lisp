@@ -22,4 +22,7 @@
     (format T "msg: ~a" msg)
     (print "Reloading")
     (robort::fix-screwup)))
+
+(user-command-helpers:register-auth #'reload)
+
 (export 'reload)

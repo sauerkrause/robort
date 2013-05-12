@@ -20,7 +20,8 @@
 (defpackage :user-command-helpers
   (:use :common-lisp)
   (:export :first-word
-	   :rest-words))
+	   :rest-words
+	   :register-auth))
 
 ;; define a package we can shovel allo the things into.
 (defpackage :user-commands
@@ -29,7 +30,22 @@
 
 (in-package :user-command-helpers)
 
+(load "configs/identification.lisp")
+
 (define-condition flooped-command (error) nil)
+(define-condition invalid-auth (error) nil)
+
+(defparameter *protected-functions* (make-hash-table))
+
+(defun needs-auth (fnsym)
+  (gethash fnsym user-command-helpers::*protected-functions*))
+
+(defun register-auth (fnsym)
+  (princ fnsym)
+  (setf (gethash fnsym user-command-helpers::*protected-functions*) fnsym))
+
+(defun priviligedp (nick)
+  (member nick *allowed-users* :test #'equal))
 
 (defun split-by-one-space (str)
   (loop for i = 0 then (1+ j)
@@ -42,30 +58,40 @@
 (defun rest-words (str)
   (cdr (split-by-one-space str)))
 
+
 (defun handle-command(connection)
   (lambda (msg)
     (when (> (length (cadr (irc::arguments msg))) 1)
       (progn
+	(flet ((notice (message) (irc:notice connection (irc:source msg) message)))
 	(let ((cmd (first-word (cadr (irc::arguments msg)))))
-	  (when (and (> (length cmd) 1) (char= (char cmd 0) #\^))
+	  (when (and (> (length cmd) 1) (char= (char cmd 0) robort::*prefix*))
 	    (let* ((cmd-name (subseq cmd 1))
 		   (cmd-file-name (format nil "user-commands/~a.lisp"
 					  cmd-name)))
 	      (if (and (probe-file cmd-file-name)
 		       (load cmd-file-name)
 		       (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
-		  (handler-case
-		   (funcall (find-symbol 
-			     (common-lisp:string-upcase cmd-name) 
-			     'user-commands) msg connection)
-		   (flooped-command 
-		    ()(irc:notice connection (irc:source msg)
-				  (format nil "Invalid usage of command: ~a" 
-					  cmd-name))))
+		  (let ((fnsym (fdefinition (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands)))
+			(nick (irc:source msg)))
+		    (handler-case
+		     (progn
+		       (if (and (needs-auth fnsym)
+				(not (priviligedp nick)))
+			   (error 'invalid-auth))
+		       (funcall fnsym msg connection))
+		     (flooped-command 
+		      ()(notice 
+			 (format nil "Invalid usage of command: ~a" 
+				 cmd-name)))
+		     (invalid-auth
+		      ()(notice
+			 (format nil "You are not God. You cannot call ~a"
+				 cmd-name)))))
 		(progn 
 		  (princ (cadr (irc::arguments msg)))
 		  (irc:notice connection (irc:source msg)
-			      (format nil "~a is not a valid command" cmd-name)))))))))))
+			      (format nil "~a is not a valid command" cmd-name))))))))))))
 
 ;; this will walk the .lisp files in user-commands/
 ;; it should register each file it finds with a hash map.

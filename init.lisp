@@ -18,7 +18,7 @@
 
 (load "common-defs.lisp")
 (load "user-commands.lisp")
-(load "user-commands/reload.lisp")
+
 (defun init-hooks (connection)
   (irc:add-hook connection 'irc::irc-privmsg-message
 		(user-command-helpers::handle-command connection)))

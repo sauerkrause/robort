@@ -16,13 +16,10 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
+(load "user-commands/common.lisp")
+
 (defun list-commands (msg connection)
-	(let* ((word-list nil)
-	       (privmsg-p
-		(not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	       (destination (if privmsg-p 
-				(irc:source msg)
-			      (first (irc:arguments msg)))))
+	(let ((word-list nil))
 	  (labels ((symbol-internalp 
 		    (sym pkg)
 		    (multiple-value-bind
@@ -36,9 +33,15 @@
 		(progn
 		  (map-symbols :user-commands
 			       (lambda (key value)
-				 (setf word-list (cons (string key) word-list))))
+				 (if (or
+				      (not
+				       (user-command-helpers::needs-auth
+					(fdefinition 
+					 (find-symbol (string-upcase key) 'user-commands))))
+				      (user-command-helpers::priviligedp (get-nick msg)))
+				     (setf word-list (cons (string key) word-list)))))
 		  (irc:privmsg connection
-			       destination
+			       (get-destination msg)
 			       (if (listp word-list)
 				   (with-output-to-string 
 				     (s)

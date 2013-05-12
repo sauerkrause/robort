@@ -1,4 +1,4 @@
-;; Copyright 2013 Robert Allen Krause <robert.allen.krause@gmail.com>
+;; Copyright 2013 Robert Allen Krause <robert.allen.krause@gmail.com
 
 ;;     This file is part of Robort.
 
@@ -25,3 +25,6 @@
 ;; set of channels
 (defparameter *channels* ())
 (pushnew "#bottest" *channels* :test #'equal)
+
+;; character to use for command prefix
+(defparameter *prefix* #\^)

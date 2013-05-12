@@ -27,8 +27,10 @@
 			 (format nil "~a" (if fortunep
 					      "*Cough* This snack contains a secret message from the land of the orient"
 					    response)))
+	    (setf (cadr (irc::arguments msg)) (format nil "~:Cfortune" robort::*prefix*))
 	    (when fortunep 
 	      (sleep 0.1)
-	      (fortune msg connection)))))
+	      (funcall (user-command-helpers::handle-command connection)
+		       msg)))))
 
 (export 'botsnack)

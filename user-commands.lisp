@@ -21,7 +21,8 @@
   (:use :common-lisp)
   (:export :first-word
 	   :rest-words
-	   :register-auth))
+	   :register-auth
+	   :authed-funcall))
 
 ;; define a package we can shovel allo the things into.
 (defpackage :user-commands
@@ -59,6 +60,11 @@
 (defun rest-words (str)
   (cdr (split-by-one-space str)))
 
+(defun authed-funcall (nick fn &rest args)
+  (when (and (needs-auth fn)
+	     (not (priviligedp nick)))
+    (error 'invalid-auth))
+  (apply fn args))
 
 (defun handle-command(connection)
   (lambda (msg)
@@ -74,14 +80,14 @@
 	      (if (and (probe-file cmd-file-name)
 		       (load cmd-file-name)
 		       (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
-		  (let ((fnsym (fdefinition (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands)))
+		  (let ((fnsym 
+			 (fdefinition 
+			  (find-symbol 
+			   (common-lisp:string-upcase cmd-name) 
+			   'user-commands)))
 			(nick (irc:source msg)))
 		    (handler-case
-		     (progn
-		       (if (and (needs-auth fnsym)
-				(not (priviligedp nick)))
-			   (error 'invalid-auth))
-		       (funcall fnsym msg connection))
+		     (authed-funcall nick fnsym msg connection)
 		     (flooped-command 
 		      ()(notice 
 			 (format nil "Invalid usage of command: ~a" 

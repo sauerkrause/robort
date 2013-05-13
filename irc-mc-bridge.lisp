@@ -19,14 +19,10 @@
 (require :trivial-shell)
 
 ;; need a package for these helpers separate from the user-commands
-(defpackage :user-command-helpers
+(defpackage :mcirc
   (:use :common-lisp))
-;; define a package we can shovel allo the things into.
-(defpackage :user-commands
-  (:use :common-lisp
-	:user-command-helpers))
 
-(in-package :user-command-helpers)
+(in-package :mcirc)
 
 (load "configs/rcon.lisp")
 

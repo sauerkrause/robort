@@ -18,7 +18,7 @@
 
 (load "common-defs.lisp")
 (load "user-commands.lisp")
-
+(load "irc-mc-bridge.lisp")
 (in-package :robort)
 
 (defun init-hooks (connection)

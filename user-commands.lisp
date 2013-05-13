@@ -34,7 +34,7 @@
   (say-to-rcons msg connection "{~a} ~a"))
 
 (defun handle-action (msg connection)
-  (let ((action (replace-all (cadr (irc:arguments msg)) "ACTION " "")))
+  (let ((action (subseq (cadr (irc:arguments msg)) (length "ACTION  "))))
     (princ action)
     (setf (cadr (irc:arguments msg)) action)
     (say-to-rcons msg connection "* ~a ~a")))

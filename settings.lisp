@@ -19,12 +19,12 @@
 ;; Need to know at least nick and serv
 (defparameter *login*
   (make-login-info
-   :nick "robortMk2"
+   :nick "mcbort"
    :server "irc.drwilco.net"))
 
 ;; set of channels
 (defparameter *channels* ())
-(pushnew "#bottest2" *channels* :test #'equal)
+(pushnew "#minecraft" *channels* :test #'equal)
 
 ;; character to use for command prefix
 (defparameter *prefix* #\#)

@@ -19,7 +19,10 @@
 (load "common-defs.lisp")
 (load "user-commands.lisp")
 
+(in-package :robort)
+
 (defun init-hooks (connection)
+  (irc:remove-hooks connection 'irc::irc-privmsg-message)
   (irc:add-hook connection 'irc::irc-privmsg-message
 		(user-command-helpers::handle-command connection)))
 
@@ -31,3 +34,7 @@
 	      (irc:join connection s))
     ;; Maybe initialize some hooks.
     (init-hooks connection)))
+
+;; handy reinit command.
+(defun reinit (connection)
+  (init-hooks connection))

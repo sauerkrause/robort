@@ -23,8 +23,13 @@
 
 (defun init-hooks (connection)
   (irc:remove-hooks connection 'irc::irc-privmsg-message)
+  (irc:remove-hooks connection 'irc::ctcp-action-message)
   (irc:add-hook connection 'irc::irc-privmsg-message
-		(user-command-helpers::handle-command connection)))
+		(lambda (msg)
+		  (user-command-helpers::handle-message msg connection)))
+  (irc:add-hook connection 'irc::ctcp-action-message
+		(lambda (msg)
+		  (user-command-helpers::handle-action msg connection))))
 
 ;; Do anything that needs to be done prior to reading the loops here.
 (defun init (connection)

@@ -30,9 +30,14 @@
 
 (load "configs/rcon.lisp")
 
-(defun handle-command(connection)
-  (lambda (msg)
-    (say-to-rcons msg connection)))
+(defun handle-message(msg connection)
+  (say-to-rcons msg connection "{~a} ~a"))
+
+(defun handle-action (msg connection)
+  (let ((action (replace-all (cadr (irc:arguments msg)) "ACTION " "")))
+    (princ action)
+    (setf (cadr (irc:arguments msg)) action)
+    (say-to-rcons msg connection "* ~a ~a")))
 
 (defun replace-all (string part replacement &key (test #'char=))
   "Returns a new string in which all the occurences of the part 
@@ -49,15 +54,18 @@ is replaced with replacement."
 			       when pos do (write-string replacement out)
 			       while pos)))
 
-(defun say-to-rcons (msg connection)
-  (let ((message (replace-all (format nil "~a" (cadr (irc:arguments msg))) "\"" "\\\"" )))
+(defun say-to-rcons (msg connection rcons-msg)
+  (let ((message (cadr (irc:arguments msg))))
     (trivial-shell:shell-command 
-     (format nil "mcrcon -s -H ~a -P ~a -p ~a \"say {~a} ~a\""
+     (format nil "mcrcon -s -H ~a -P ~a -p ~a \"say ~a\""
 	     *rcon-host* 
 	     *rcon-port* 
 	     *rcon-passwd*
-	     (irc:source msg)
-	     message))))
+	     (replace-all 
+	      (format nil rcons-msg
+		      (irc:source msg)
+		      message)
+	      "\"" "\\\"")))))
 
 ;; this will walk the .lisp files in user-commands/
 ;; it should register each file it finds with a hash map.

@@ -62,13 +62,3 @@ is replaced with replacement."
 		      (irc:source msg)
 		      message)
 	      "\"" "\\\"")))))
-
-;; this will walk the .lisp files in user-commands/
-;; it should register each file it finds with a hash map.
-;; then when a command is called, it should load the file.
-(defun register-commands ()
-  (progn 
-    (loop for f in (directory "user-commands/*.lisp")
-	  do (load f :verbose T))
-    ()))
-(register-commands)

@@ -21,7 +21,8 @@
   (progn
     (format T "msg: ~a" msg)
     (print "Reloading")
-    (robort::fix-screwup)))
+    (robort::fast-reload)
+    (irc:read-message-loop connection)))
 
 (register-auth #'reload)
 

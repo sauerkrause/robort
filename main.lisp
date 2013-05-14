@@ -35,6 +35,12 @@
      :server (login-info-server login)
      :nickname (login-info-nick login))))
 
+(defun fast-reload ()
+    (load "settings.lisp")
+    (load "common-defs.lisp")
+    (load "init.lisp")
+    (reinit *connection*))
+
 (defun fix-screwup ()
   (reinitialize *connection*)
   (main))

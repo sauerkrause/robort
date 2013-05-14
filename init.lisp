@@ -19,6 +19,7 @@
 (load "common-defs.lisp")
 (load "user-commands.lisp")
 (load "irc-mc-bridge.lisp")
+(load "mc-irc-bridge.lisp")
 (in-package :robort)
 
 (defun init-hooks (connection)
@@ -36,12 +37,14 @@
 
 ;; Do anything that needs to be done prior to reading the loops here.
 (defun init (connection)
-  (progn
-    ;; Maybe connect to the channels we want here.
-    (dolist (s *channels*)
-	      (irc:join connection s))
-    ;; Maybe initialize some hooks.
-    (init-hooks connection)))
+  ;; Maybe connect to the channels we want here.
+  (dolist (s *channels*)
+    (irc:join connection s))
+  ;; Maybe initialize some hooks.
+  (init-hooks connection)
+  (when mcirc::*thread*
+    (sb-thread:terminate-thread mcirc::*thread*))
+  (setf mcirc::*thread* (mcirc::start-bridge connection)))
 
 ;; handy reinit command.
 (defun reinit (connection)

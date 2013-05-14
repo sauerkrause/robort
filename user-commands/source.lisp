@@ -18,7 +18,7 @@
 
 (defun source (msg connection)
     (let ((reply 
-	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
+	   (format nil "Freedom @ https://github.com/sauerkrause/mcbort")))
       (irc:privmsg connection (get-destination msg) reply)))
 
 (export 'source)

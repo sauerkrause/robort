@@ -14,7 +14,10 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
+(defvar *threads-loaded* (ql:quickload "bordeaux-threads"))
+
 (require :cl-irc)
+(require :bordeaux-threads)
 
 (load "common-defs.lisp")
 (load "user-commands.lisp")
@@ -43,7 +46,7 @@
   ;; Maybe initialize some hooks.
   (init-hooks connection)
   (when mcirc::*thread*
-    (sb-thread:terminate-thread mcirc::*thread*))
+    (bordeaux-threads:destroy-thread mcirc::*thread*))
   (setf mcirc::*thread* (mcirc::start-bridge connection)))
 
 ;; handy reinit command.

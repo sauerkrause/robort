@@ -32,15 +32,41 @@
 			       (sleep 0.5)))))))
 
 (defun handle-line (line)
-  (let ((message ()))
-    (when (search "[INFO] <" line)
-      (setf message (format nil "~a~%" (subseq line
-					       (+ (length "[INFO] ") 
-						  (search "[INFO] " line))))))
+  (let ((message ())
+	(notice ()))
+    (cond ((search "[INFO] <" line)
+	   (setf message (format nil "~a~%" (subseq line
+						    (+ (length "[INFO] ") 
+						       (search "[INFO] " line))))))
+	  ((and (search "[INFO] " line)
+		(search "] logged in with entity" line))
+	   (setf notice (format nil "~a has joined~%" 
+				(let* ((name-begin
+					(+ (length "[INFO] ")
+					   (search "[INFO] " line)))
+				       (name-end 
+					(search "[" line :start2 name-begin)))
+				  (subseq line name-begin name-end)))))
+	  ((and (search "[INFO] " line)
+		(search " lost connection: " line))
+	   (setf notice (format nil "~a has quit~%"
+				(let* ((name-begin
+					(+ (length "[INFO] ")
+					   (search "[INFO] " line)))
+				       (name-end
+					(search " lost connection: " line
+						:start2 name-begin)))
+				  (subseq line name-begin name-end))))))
+						   
+    	   
     (dolist (chan robort::*channels*)
+      (flet ((bridge (fn arg)
+	       (funcall fn robort::*connection*
+			chan arg)))
       (when message 
-	(irc:privmsg robort::*connection*
-		     chan message)))))
+	(bridge #'irc:privmsg message))
+      (when notice
+	(bridge #'irc:notice notice))))))
 
 (defun start-bridge (connection)
   (bordeaux-threads:make-thread

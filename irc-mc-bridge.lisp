@@ -27,13 +27,13 @@
 (load "configs/rcon.lisp")
 
 (defun handle-message(msg connection)
-  (say-to-rcons msg connection "{~a} ~a"))
+  (say-to-rcons msg "{~a} ~a"))
 
 (defun handle-action (msg connection)
   (let ((action (subseq (cadr (irc:arguments msg)) (length "ACTION  "))))
     (princ action)
     (setf (cadr (irc:arguments msg)) action)
-    (say-to-rcons msg connection "* ~a ~a")))
+    (say-to-rcons msg "* ~a ~a")))
 
 (defun replace-all (string part replacement &key (test #'char=))
   "Returns a new string in which all the occurences of the part 
@@ -50,7 +50,7 @@ is replaced with replacement."
 			       when pos do (write-string replacement out)
 			       while pos)))
 
-(defun say-to-rcons (msg connection rcons-msg)
+(defun say-to-rcons (msg rcons-msg)
   (let ((message (cadr (irc:arguments msg))))
     (trivial-shell:shell-command 
      (format nil "mcrcon -s -H ~a -P ~a -p ~a \"say ~a\""

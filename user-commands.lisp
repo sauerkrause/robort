@@ -66,22 +66,33 @@
     (error 'invalid-auth))
   (apply fn args))
 
+(defun prefixedp (command)
+  (let ((ret-val ()))
+    (let ((prefix-results
+	   (dolist (prefix robort::*prefixen*)
+	     (unless (> (length prefix) (length command))
+	       (let ((command-prefix (subseq command 0 (length prefix))))
+		 (if (equalp command-prefix prefix)
+		     (setf ret-val prefix))
+		 robort::*prefixen*))))))
+    ret-val))
+
 (defun handle-command(msg connection)
     (when (and (not (gethash (irc:source msg) *ignore-map*))
 	   (> (length (cadr (irc::arguments msg))) 1))
       (progn
 	(flet ((notice (message) (irc:notice connection (irc:source msg) message)))
-	(let ((cmd (first-word (cadr (irc::arguments msg)))))
-	  (when (and (> (length cmd) 1) (char= (char cmd 0) robort::*prefix*))
-	    (let* ((cmd-name (subseq cmd 1))
-		   (cmd-file-name (format nil "user-commands/~a.lisp"
-					  cmd-name)))
-	      (if (and (probe-file cmd-file-name)
-		       (load cmd-file-name)
-		       (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
-		  (let ((fnsym 
-			 (fdefinition 
-			  (find-symbol 
+	  (let ((cmd (cadr (irc::arguments msg))))
+	    (when (and (> (length cmd) 1) (prefixedp cmd))
+	      (let* ((cmd-name (first-word (subseq cmd (length (prefixedp cmd)))))
+		     (cmd-file-name (format nil "user-commands/~a.lisp"
+					    cmd-name)))
+		(if (and (probe-file cmd-file-name)
+			 (load cmd-file-name)
+			 (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
+		    (let ((fnsym 
+			   (fdefinition 
+			    (find-symbol 
 			   (common-lisp:string-upcase cmd-name) 
 			   'user-commands)))
 			(nick (irc:source msg)))

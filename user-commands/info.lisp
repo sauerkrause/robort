@@ -23,6 +23,11 @@
 
 (in-package :user-commands)
 
+(load "user-commands/common.lisp")
+
+;; Contains *mc-server* and *mc-port*
+(load "configs/mc.lisp")
+
 ;; terrible recursion I know...,
 ;; but split-sequence in cl-utilities apparently can't do this ಠ_ಠ
 (defun split-by-string (str delimiter)
@@ -63,7 +68,6 @@
 						 #\|
 						 char)))
 	(handle-mc-server-output server (get-output-stream-string output))))))
-(load "configs/mc.lisp")
 
 (defun info (msg connection)
   (let ((message (get-mc-info *mc-server* *mc-port*)))

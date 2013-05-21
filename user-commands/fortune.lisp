@@ -14,11 +14,22 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
+(defvar *shell-loaded* (ql:quickload "trivial-shell"))
+(require :trivial-shell)
+
 (in-package :user-commands)
 
-(defun source (msg connection)
-    (let ((reply 
-	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
-      (irc:privmsg connection (get-destination msg) reply)))
-
-(export 'source)
+(defun fortune (msg connection)
+	(let* ((response (trivial-shell:shell-command "fortune -s"))
+	       (fortune-list
+		(loop for i = 0 then (1+ j)
+		      as j = (position #\linefeed response :start i)
+		      collect (subseq response i j)
+		      while j)))
+	  (dolist (line fortune-list)
+	    (progn
+	      (irc:privmsg connection
+			   (get-destination msg)
+			   line)
+	      (sleep 0.5)))))
+(export 'fortune)

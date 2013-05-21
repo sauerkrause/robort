@@ -16,9 +16,8 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(defun source (msg connection)
-    (let ((reply 
-	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
-      (irc:privmsg connection (get-destination msg) reply)))
+(load "user-commands/common.lisp")
 
-(export 'source)
+(defun look-of-disapproval (msg connection)
+    (irc:privmsg connection (get-destination msg) "ಠ_ಠ"))
+(export 'look-of-disapproval)

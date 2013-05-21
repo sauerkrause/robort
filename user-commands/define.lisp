@@ -16,9 +16,27 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(defun source (msg connection)
-    (let ((reply 
-	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
-      (irc:privmsg connection (get-destination msg) reply)))
+(defun message-string (msg)
+  (cadr (irc::arguments msg)))
 
-(export 'source)
+(defun define (msg connection)
+  (let ((nickname (irc:source msg))
+	(reply ""))
+    (progn
+      (let ((msg-list (rest-words (message-string msg))))
+	;; error out before attempting anything when we don't have the args
+	(progn 
+	  (when (< (length msg-list) 2)
+	    (error 'user-command-helpers::flooped-command))
+	  (let ((fname (first msg-list))
+		(fdef (rest msg-list)))
+	    ;; define the function and maybe write to a file.
+	    ())))
+      (irc:privmsg connection (get-destination msg)
+		   (format nil "~@[~a: ~]Defined!"
+			   (if (not (privmsgp msg))
+			       nickname))))))
+
+(user-command-helpers::register-auth #'define)
+
+(export 'define)

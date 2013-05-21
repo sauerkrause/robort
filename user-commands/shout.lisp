@@ -14,11 +14,14 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
+(require :cl-irc)
+
 (in-package :user-commands)
+(load "user-commands/common.lisp")
 
-(defun source (msg connection)
-    (let ((reply 
-	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
-      (irc:privmsg connection (get-destination msg) reply)))
-
-(export 'source)
+(defun shout (msg connection)
+  (irc:privmsg connection 
+	       (get-destination msg) 
+	       (string-upcase (get-message (rest-words 
+					    (cadr (irc::arguments msg)))))))
+(export 'shout)

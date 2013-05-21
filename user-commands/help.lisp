@@ -14,13 +14,17 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
 
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
-
-(let ((help-message "Use # to prepend commands. #info will list currently bridged server info. #list-commands will show you what commands you have at your disposal."))
-  (defun help (msg connection)
-    (irc:privmsg connection (get-destination msg) help-message)))
+(defun help (msg connection)
+  (let* ((privmsg-p
+	  (not (char= (char (first (irc:arguments msg)) 0) #\#)))
+	 (destination (if privmsg-p
+			  (irc:source msg)
+			(first (irc:arguments msg)))))
+    (irc:privmsg 
+     connection
+     destination
+     (format nil "Checkout ~:clist-commands" (car robort::*prefix*)))))
 (export 'help)

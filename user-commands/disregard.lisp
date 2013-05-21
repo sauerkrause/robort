@@ -14,11 +14,14 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
+(require :cl-irc)
 (in-package :user-commands)
 
-(defun source (msg connection)
-    (let ((reply 
-	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
-      (irc:privmsg connection (get-destination msg) reply)))
-
-(export 'source)
+(defun disregard (msg connection)
+  (let ((nick (first (rest-words (cadr (irc::arguments msg))))))
+    (setf (gethash nick user-command-helpers::*ignore-map*) nick)
+    (irc:privmsg connection
+		 (get-destination msg)
+		 (format nil "Disregarding ~a" nick))))
+(register-auth #'disregard)
+(export 'disregard)

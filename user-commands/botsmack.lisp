@@ -16,9 +16,9 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(defun source (msg connection)
-    (let ((reply 
-	   (format nil "Freedom @ https://github.com/sauerkrause/robort")))
-      (irc:privmsg connection (get-destination msg) reply)))
-
-(export 'source)
+(defun botsmack (msg connection)
+	(let* ((responses (vector ":'(" ":C" "D:" "(ಥ_ಥ)" ":く" "ಠ_ಠ")))
+	  (irc:privmsg connection
+		       (get-destination msg)
+		       (elt responses (random (length responses))))))
+(export 'botsmack)

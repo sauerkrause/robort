@@ -16,15 +16,17 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (load "common-defs.lisp")
 
+(defparameter *botnick* "robort")
 ;; Need to know at least nick and serv
 (defparameter *login*
   (make-login-info
-   :nick "robort"
+   :nick *botnick*
    :server "irc.drwilco.net"))
 
 ;; set of channels
 (defparameter *channels* ())
-(pushnew "#bottest" *channels* :test #'equal)
+(pushnew "#minecraft" *channels* :test #'equal)
 
-;; character to use for command prefix
-(defparameter *prefix* #\^)
+;; command prefixen
+(defparameter *prefixen* `("^" 
+			   ,(format nil "~a: " *botnick*)))

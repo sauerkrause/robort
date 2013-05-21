@@ -14,30 +14,13 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(defvar *threads-loaded* (ql:quickload "bordeaux-threads"))
-
 (require :cl-irc)
-(require :bordeaux-threads)
 
-(load "common-defs.lisp")
-(load "user-commands.lisp")
-(in-package :robort)
+(in-package :user-commands)
 
-(defun init-hooks (connection)
-  (irc:remove-hooks connection 'irc::irc-privmsg-message)
-  ;; (irc:remove-hooks connection 'irc::ctcp-action-message)
-  (irc:add-hook connection 'irc::irc-privmsg-message
-		(lambda (msg)
-		  (user-command-helpers::handle-command msg connection))))
+(load "user-commands/common.lisp")
 
-;; Do anything that needs to be done prior to reading the loops here.
-(defun init (connection)
-  ;; Maybe connect to the channels we want here.
-  (dolist (s *channels*)
-    (irc:join connection s))
-  ;; Maybe initialize some hooks.
-  (init-hooks connection))
-
-;; handy reinit command.
-(defun reinit (connection)
-  (init-hooks connection))
+(let ((about-message "I am an IRC bot derived from cl-irc. I don't have much real use other than as the base for mcbort."))
+  (defun about (msg connection)
+    (irc:privmsg connection (get-destination msg) about-message)))
+(export 'about)

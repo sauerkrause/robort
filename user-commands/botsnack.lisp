@@ -30,7 +30,6 @@
 	    (setf (cadr (irc::arguments msg)) (format nil "~(~a~)fortune" (car robort::*prefixen*)))
 	    (when fortunep 
 	      (sleep 0.1)
-	      (funcall (user-command-helpers::handle-command connection)
-		       msg)))))
+	      (user-command-helpers::handle-command msg connection)))))
 
 (export 'botsnack)

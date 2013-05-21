@@ -20,7 +20,7 @@
 
 (load "user-commands/common.lisp")
 
-(let ((about-message "I am a Minecraft <-> Irc Bridge Bot Derived from Robort"))
+(let ((about-message "I am an IRC bot derived from cl-irc. I don't have much real use other than as the base for mcbort."))
   (defun about (msg connection)
     (irc:privmsg connection (get-destination msg) about-message)))
 (export 'about)

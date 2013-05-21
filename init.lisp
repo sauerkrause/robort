@@ -21,22 +21,14 @@
 
 (load "common-defs.lisp")
 (load "user-commands.lisp")
-(load "irc-mc-bridge.lisp")
-(load "mc-irc-bridge.lisp")
 (in-package :robort)
 
 (defun init-hooks (connection)
   (irc:remove-hooks connection 'irc::irc-privmsg-message)
-  (irc:remove-hooks connection 'irc::ctcp-action-message)
+  ;; (irc:remove-hooks connection 'irc::ctcp-action-message)
   (irc:add-hook connection 'irc::irc-privmsg-message
 		(lambda (msg)
-		  (user-command-helpers::handle-command msg connection)))
-  (irc:add-hook connection 'irc::irc-privmsg-message
-		(lambda (msg)
-		  (mcirc::handle-message msg connection)))
-  (irc:add-hook connection 'irc::ctcp-action-message
-		(lambda (msg)
-		  (mcirc::handle-action msg connection))))
+		  (user-command-helpers::handle-command msg connection))))
 
 ;; Do anything that needs to be done prior to reading the loops here.
 (defun init (connection)

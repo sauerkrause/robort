@@ -85,10 +85,9 @@
 	  (let ((cmd (cadr (irc::arguments msg))))
 	    (when (and (> (length cmd) 1) (prefixedp cmd))
 	      (let* ((cmd-name (first-word (subseq cmd (length (prefixedp cmd)))))
-		     (cmd-file-name (format nil "user-commands/~a.lisp"
+		     (cmd-file-name (format nil "user-commands/~(~a~).lisp"
 					    cmd-name)))
 		(if (and (probe-file cmd-file-name)
-			 (load cmd-file-name)
 			 (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
 		    (let ((fnsym 
 			   (fdefinition 
@@ -112,8 +111,7 @@
 			      (format nil "~a is not a valid command" cmd-name)))))))))))
 
 ;; this will walk the .lisp files in user-commands/
-;; it should register each file it finds with a hash map.
-;; then when a command is called, it should load the file.
+;; and attempt to load them.
 (defun register-commands ()
   (progn 
     (loop for f in (directory "user-commands/*.lisp")

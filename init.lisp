@@ -36,10 +36,7 @@
   (dolist (s *channels*)
     (irc:join connection s))
   ;; Maybe initialize some hooks.
-  (init-hooks connection)
-  (when mcirc::*thread*
-    (bordeaux-threads:destroy-thread mcirc::*thread*))
-  (setf mcirc::*thread* (mcirc::start-bridge connection)))
+  (init-hooks connection))
 
 ;; handy reinit command.
 (defun reinit (connection)

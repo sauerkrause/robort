@@ -1,4 +1,4 @@
-;; Copyright 2013 Robert Allen Krause <robert.allen.krause@gmail.com>
+ ;; Copyright 2013 Robert Allen Krause <robert.allen.krause@gmail.com>
 
 ;;     This file is part of Robort.
 
@@ -17,14 +17,11 @@
 
 (in-package :user-commands)
 
-(defun help (msg connection)
-  (let* ((privmsg-p
-	  (not (char= (char (first (irc:arguments msg)) 0) #\#)))
-	 (destination (if privmsg-p
-			  (irc:source msg)
-			(first (irc:arguments msg)))))
-    (irc:privmsg 
-     connection
-     destination
-     (format nil "Checkout ~alist-commands" (car robort::*prefixen*)))))
-(export 'help)
+(defun refresh-commands (msg connection)
+  (progn
+    (format T "msg: ~a" msg)
+    (print "Refreshing commands")
+    (user-command-helpers::register-commands)))
+
+(register-auth #'refresh-commands)
+(export 'refresh-commands)

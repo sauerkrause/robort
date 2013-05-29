@@ -14,18 +14,10 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-
 (in-package :user-commands)
 
-(defun part (msg connection)
-  (let ((channel 
-	 (first (user-command-helpers::rest-words 
-		 (cadr (irc::arguments msg))))))
-  (if channel
-      (progn
-	(setf robort::*channels* (set-difference robort::*channels* (list channel) :test #'equal))
-	(robort::persist-channels)
-	(irc:part connection channel))
-    (error 'user-command-helpers::flooped-command))))
-(register-auth #'part)
-(export 'part)
+(load "user-commands/common.lisp")
+
+(defun .^ (msg connection)
+  ())
+(export '.^)

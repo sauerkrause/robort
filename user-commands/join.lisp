@@ -21,9 +21,10 @@
 	 (first (user-command-helpers::rest-words
 		 (cadr (irc::arguments msg))))))
     (if channel
-	(irc:join connection 
-		  (first 
-		   (user-command-helpers::rest-words (cadr (irc::arguments msg)))))
+	(progn 
+	  (irc:join connection channel)
+	  (pushnew channel robort::*channels* :test #'equal)
+	  (robort::persist-channels))
       (error 'user-command-helpers::flooped-command))))
 (register-auth #'join)
 (export 'join)

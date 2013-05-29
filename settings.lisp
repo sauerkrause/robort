@@ -24,9 +24,22 @@
    :server "irc.drwilco.net"))
 
 ;; set of channels
-(defparameter *channels* ())
-(pushnew "#minecraft" *channels* :test #'equal)
+(defparameter *channels*
+  (with-open-file (channel-file "configs/channels.lisp"
+				:direction :input
+				:if-exists :supersede
+				:if-does-not-exist nil)
+    (if channel-file
+	(read channel-file)
+	())))
 
+(defun persist-channels ()
+  (with-open-file (channel-file "configs/channels.lisp"
+				:direction :output
+				:if-exists :supersede
+				:if-does-not-exist :create)
+    (print *channels* channel-file)))
+  
 ;; command prefixen
 (defparameter *prefixen* `("^" 
 			   ,(format nil "~a: " *botnick*)))

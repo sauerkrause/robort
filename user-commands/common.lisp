@@ -18,6 +18,19 @@
 
 (in-package :user-commands)
 
+(defun replace-char-with-string (input-str char replacement)
+  "Returns copy of input-str with instances of char replaced by replacement"
+  (let ((ret (make-array 0
+			 :element-type 'character
+			 :fill-pointer 0
+			 :adjustable t)))
+    (loop for chr across input-str
+	 do (if (eql chr char)
+		(loop for tchr across replacement
+		     do (vector-push-extend tchr ret))
+		(vector-push-extend chr ret)))
+    ret))
+
 (defun get-message (list)
   (if (listp list)
       (with-output-to-string (s)

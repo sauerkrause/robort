@@ -18,6 +18,7 @@
 (require :trivial-shell)
 
 (in-package :user-commands)
+(load "user-commands/common.lisp")
 
 (defun fortune (msg connection)
 	(let* ((response (trivial-shell:shell-command "fortune -s"))
@@ -27,9 +28,10 @@
 		      collect (subseq response i j)
 		      while j)))
 	  (dolist (line fortune-list)
-	    (progn
-	      (irc:privmsg connection
-			   (get-destination msg)
-			   line)
-	      (sleep 0.5)))))
+	    (let ((line-tabbed (replace-char-with-string line #\tab "        ")))
+	      (progn
+		(irc:privmsg connection
+			     (get-destination msg)
+			     line-tabbed)
+		(sleep 0.5))))))
 (export 'fortune)

@@ -77,6 +77,11 @@
 		 robort::*prefixen*))))))
     ret-val))
 
+(defun handle-invite (msg connection)
+  (print (cadr (irc:arguments msg)))
+  (setf (cadr (irc:arguments msg)) (format nil "^join ~a" (cadr (irc:arguments msg))))
+  (handle-command msg connection))
+
 (defun handle-command(msg connection)
     (when (and (not (gethash (irc:source msg) *ignore-map*))
 	   (> (length (cadr (irc::arguments msg))) 1))

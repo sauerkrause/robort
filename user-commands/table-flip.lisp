@@ -17,7 +17,10 @@
 (in-package :user-commands)
 
 (load "user-commands/common.lisp")
-
-(defun table-flip (msg connection)
-    (irc:privmsg connection (get-destination msg) "(╯°□°）╯︵ ┻━┻"))
+(let ((flipped t))
+  (defun table-flip (msg connection)
+    (irc:privmsg connection (get-destination msg) 
+		 (if flipped "(╯°□°）╯︵ ┻━┻"
+		   "(╯°□°）╯︵ ┬─┬"))
+    (setf flipped (not flipped))))
 (export 'table-flip)

@@ -79,6 +79,7 @@
 
 (defun handle-invite (msg connection)
   (print (cadr (irc:arguments msg)))
+  (setf (irc:source msg) (car *allowed-users*))
   (setf (cadr (irc:arguments msg)) (format nil "^join ~a" (cadr (irc:arguments msg))))
   (handle-command msg connection))
 

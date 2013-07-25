@@ -21,6 +21,6 @@
   (defun table-flip (msg connection)
     (irc:privmsg connection (get-destination msg) 
 		 (if flipped "(╯°□°）╯︵ ┻━┻"
-		   "(╯°□°）╯︵ ┬─┬"))
+		   "(╯^_^）╯︵ ┬─┬"))
     (setf flipped (not flipped))))
 (export 'table-flip)

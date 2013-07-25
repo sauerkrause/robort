@@ -48,45 +48,4 @@
 (defun get-nick (msg)
   (irc:source msg))
 
-(defmacro with-gensyms ((&rest names) &body body)
-  `(let ,(loop for n in names collect `(,n (gensym)))
-     ,@body))
-
-(defun rand-value (list-values)
-  (elt list-values (if (< 1 (length list-values))
-		       (random (length list-values))
-		     0)))
-
-(defmacro name-literal (name list-values)
-  `(defun ,name (msg connection)
-       (irc:privmsg connection
-		    (get-destination msg)
-		    (rand-value ,list-values))))
-
-(defmacro value-literal (name list-values)
-  `(defun ,(intern 
-	    (string-upcase (concatenate 
-			    'string 
-			    "value-" 
-			    (string name)))) ()
-     (rand-value ,list-values)))
-
-(defmacro literal-literal (name list-values)
-  `(defun ,(intern (string-upcase
-		    (concatenate 'string
-				 "literal-"
-				 (string name)))) ()
-				 ,list-values))
-
-(defmacro define-literal (name values &key needs-auth)
-  (with-gensyms (index-value
-                 list-values)
-                `(progn
-		   (let ((,list-values ,values))
-		     (name-literal ,name ,list-values)
-		     (value-literal ,name ,list-values)
-		     (literal-literal ,name ,list-values))
-		   (user-command-helpers:forget-auth (function ,name))
-                   (when ,needs-auth
-                     (user-command-helpers:register-auth (function ,name)))
-                   (export ',name))))
+(load "user-commands/common-macros.lisp")

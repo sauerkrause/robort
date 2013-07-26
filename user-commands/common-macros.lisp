@@ -23,9 +23,12 @@
      ,@body))
 
 (defun rand-value (list-values)
-  (elt list-values (if (< 1 (length list-values))
+  (let ((item (elt list-values (if (< 1 (length list-values))
 		       (random (length list-values))
-		     0)))
+		     0))))
+    (if (stringp item)
+	item
+      (eval item))))
 
 (defmacro name-literal (name list-values)
   `(defun ,name (msg connection)

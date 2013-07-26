@@ -26,8 +26,9 @@
   (multiple-value-bind
    (second minute hour date month year day-of-week dst-p tz)
    (get-decoded-time)
-   (print (nth day-of-week *day-names*))
    (nth day-of-week *day-names*)))
 
-(define-literal fridayp '((let ((friday? (equal "Friday" (day-of-week))))
-			     (if friday? "T" "NIL"))))
+(define-literal fridayp `(,(lambda () 
+			     (let 
+				 ((friday? (equal "Friday" (day-of-week))))
+			       (if friday? "T" "NIL")))))

@@ -26,9 +26,12 @@
   (let ((item (elt list-values (if (< 1 (length list-values))
 		       (random (length list-values))
 		     0))))
-    (if (stringp item)
-	item
-      (eval item))))
+    (format t "string? ~a~%\
+function? ~a~%\
+~a" (stringp item) (functionp item) item)
+    (cond ((stringp item) item)
+	  ((functionp item) (funcall item))
+	  (t (eval item)))))
 
 (defmacro name-literal (name list-values)
   `(defun ,name (msg connection)

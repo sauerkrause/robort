@@ -19,8 +19,8 @@
 (load "user-commands/common.lisp")
 
 (let ((flipped t))
-  (define-literal table-flip `(,(lambda ()
-				  (setf flipped (not flipped))
-				  (if (not flipped)
-				      "(╯°□°）╯︵ ┻━┻"
-				    "(╯^_^）╯︵ ┬─┬")))))
+  (define-literal table-flip (vector (lambda ()
+				       (setf flipped (not flipped))
+				       (if (not flipped)
+					   "(╯°□°）╯︵ ┻━┻"
+					 "(╯^_^）╯︵ ┬─┬")))))

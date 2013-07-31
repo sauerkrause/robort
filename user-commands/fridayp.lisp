@@ -28,7 +28,7 @@
    (get-decoded-time)
    (nth day-of-week *day-names*)))
 
-(define-literal fridayp `(,(lambda () 
-			     (let 
-				 ((friday? (equal "Friday" (day-of-week))))
-			       (if friday? "T" "NIL")))))
+(define-literal fridayp (vector (lambda () 
+				  (let 
+				      ((friday? (equal "Friday" (day-of-week))))
+				    (if friday? "T" "NIL")))))

@@ -52,6 +52,10 @@
 				 ,list-values))
 
 (defmacro define-literal (name values &key needs-auth)
+"makes a define-literal form taking a
+(define-literal <symbol-name> <sequence of literals>)
+sequence of literals may be a sequence containing strings
+or thunks that return strings"
   (with-gensyms (index-value
                  list-values)
                 `(progn

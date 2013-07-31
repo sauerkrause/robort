@@ -18,6 +18,4 @@
 
 (load "user-commands/common.lisp")
 
-(defun poop (msg connection)
-    (irc:privmsg connection (get-destination msg) "💩"))
-(export 'poop)
+(define-literal poop (vector "💩"))

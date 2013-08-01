@@ -17,11 +17,11 @@
 (require :cl-irc)
 (in-package :user-commands)
 
-(defun regard (msg connection)
+(defun undisregard (msg connection)
   (let ((nick (first (rest-words (cadr (irc::arguments msg))))))
     (setf (gethash nick user-command-helpers::*ignore-map*) nil)
     (irc:privmsg connection
 		 (get-destination msg)
-		 (format nil "Regarding ~a" nick))))
-(register-auth #'regard)
-(export 'regard)
+		 (format nil "Undisregarding ~a" nick))))
+(register-auth #'undisregard)
+(export 'undisregard)

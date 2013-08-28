@@ -87,12 +87,22 @@
   (setf (cadr (irc:arguments msg)) (format nil "^join ~a" (cadr (irc:arguments msg))))
   (handle-command msg connection))
 
+(defun botmessagep (str)
+  (let ((open (search "<" str))
+	(close (search "> " str)))
+    (if (and open close (< open close))
+	(subseq str (+ 2 close)))))
+
 (defun handle-command(msg connection)
     (when (and (not (gethash (irc:source msg) *ignore-map*))
 	   (> (length (cadr (irc::arguments msg))) 1))
       (progn
 	(flet ((notice (message) (irc:notice connection (irc:source msg) message)))
-	  (let ((cmd (cadr (irc::arguments msg))))
+	  (let ((cmd
+		 (let ((uncut-cmd (cadr (irc::arguments msg))))
+		   (if (botmessagep uncut-cmd)
+				    (botmessagep uncut-cmd)
+				    uncut-cmd))))
 	    (when (and (> (length cmd) 1) (prefixedp cmd))
 	      (let* ((cmd-name (remove #\* (first-word (subseq cmd (length (prefixedp cmd))))))
 		     (cmd-file-name (format nil "user-commands/~(~a~).lisp"

@@ -19,3 +19,5 @@
 (ql:quickload "cl-irc")
 (ql:quickload "cl-smtp")
 (ql:quickload "trivial-shell")
+(ql:quickload "drakma")
+(ql:quickload "do-urlencode")

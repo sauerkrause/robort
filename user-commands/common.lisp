@@ -40,6 +40,7 @@
 
 (defun privmsgp (msg)
   (not (char= (char (first (irc:arguments msg)) 0) #\#)))
+
 (defun get-destination (msg)
   (if (privmsgp msg)
       (irc:source msg)

@@ -25,7 +25,7 @@
   (let ((stream
 	 (drakma:http-request
 	  (format nil
-		  "http://vps.sauerkrause.us:8000/~a/jellybeans"
+		  "http://localhost:8000/~a/jellybeans"
 		  (do-urlencode:urlencode name))
 	  :want-stream t)))
     (read stream)))

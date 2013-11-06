@@ -14,23 +14,25 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
 (in-package :user-commands)
 
-(defun botsnack (msg connection)
-	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!" ":る" 'fortune))
-	       (response (elt responses (random (length responses))))
-	       (fortunep (eq response 'fortune)))
-	  (progn
-	    (irc:privmsg connection
-			 (get-destination msg)
-			 (format nil "~a" (if fortunep
-					      "*Cough* This snack contains a secret message from the land of the orient"
-					    response)))
-	    (setf (cadr (irc::arguments msg)) (format nil "~(~a~)fortune" (car robort::*prefixen*)))
-	    (when fortunep 
-	      (sleep 0.1)
-	      (user-command-helpers::handle-command msg connection))
-	    (post-jellybeans (irc:source msg) 1))))
+(require :do-urlencode)
+(require :drakma)
 
-(export 'botsnack)
+(load "user-commands/common.lisp")
+
+(defun get-points (name)
+  (let ((stream
+	 (drakma:http-request
+	  (format nil
+		  "http://vps.sauerkrause.us:8000/~a/points"
+		  (do-urlencode:urlencode name))
+	  :want-stream t)))
+    (read stream)))
+
+(defun points (msg connection)
+  (let ((name (if (rest-words (cadr (irc:arguments msg)))
+		  (first (rest-words (cadr (irc:arguments msg))))
+		(irc:source msg))))
+    (irc:privmsg connection (get-destination msg) 
+		 (format nil "Points for ~a: ~d" name (get-points name)))))

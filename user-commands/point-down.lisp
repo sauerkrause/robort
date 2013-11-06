@@ -14,23 +14,30 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
 (in-package :user-commands)
 
-(defun botsnack (msg connection)
-	(let* ((responses (vector "Yay!" ":D" "C:" ":3" "Whoop!" ":る" 'fortune))
-	       (response (elt responses (random (length responses))))
-	       (fortunep (eq response 'fortune)))
-	  (progn
-	    (irc:privmsg connection
-			 (get-destination msg)
-			 (format nil "~a" (if fortunep
-					      "*Cough* This snack contains a secret message from the land of the orient"
-					    response)))
-	    (setf (cadr (irc::arguments msg)) (format nil "~(~a~)fortune" (car robort::*prefixen*)))
-	    (when fortunep 
-	      (sleep 0.1)
-	      (user-command-helpers::handle-command msg connection))
-	    (post-jellybeans (irc:source msg) 1))))
+(require :do-urlencode)
+(require :drakma)
 
-(export 'botsnack)
+(load "user-commands/common.lisp")
+
+(defun post-points (name number)
+  (drakma:http-request
+   (format nil
+	   "http://vps.sauerkrause.us:8000/~a/points"
+	   name)
+   :method :post
+   :parameters `(("number" . ,(write-to-string number)))))
+
+(defun post-jellybeans (name number)
+  (drakma:http-request
+   (format nil
+	   "http://vps.sauerkrause.us:8000/~a/jellybeans"
+	   name)
+   :method :post
+   :parameters `(("number" . ,(write-to-string number)))))
+
+(defun point-down (msg connection)
+  (let ((name (first (rest-words (cadr (irc:arguments msg))))))
+    (post-jellybeans (irc:source msg) -1)
+    (post-points name -1)))

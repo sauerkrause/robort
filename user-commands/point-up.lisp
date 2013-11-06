@@ -24,7 +24,7 @@
 (defun post-points (name number)
   (drakma:http-request
    (format nil
-	   "http://vps.sauerkrause.us:8000/~a/points"
+	   "http://localhost:8000/~a/points"
 	   name)
    :method :post
    :parameters `(("number" . ,(write-to-string number)))))
@@ -32,7 +32,7 @@
 (defun post-jellybeans (name number)
   (drakma:http-request
    (format nil
-	   "http://vps.sauerkrause.us:8000/~a/jellybeans"
+	   "http://localhost:8000/~a/jellybeans"
 	   name)
    :method :post
    :parameters `(("number" . ,(write-to-string number)))))

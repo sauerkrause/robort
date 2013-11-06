@@ -16,4 +16,11 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(define-literal botsmack (vector ":'(" ":C" "D:" "(ಥ_ಥ)" ":く" "ಠ_ಠ"))
+(defun botsmack (msg connection)
+  (let* ((responses (vector ":'(" ":C" "D:" "(ಥ_ಥ)" ":く" "ಠ_ಠ"))
+	 (response (elt responses (random (length responses)))))
+    (progn
+      (irc:privmsg connection
+		   (get-destination msg)
+		   (format nil "~a" response))
+      (post-jellybeans (irc:source msg) -1))))

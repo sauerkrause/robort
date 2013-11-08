@@ -130,44 +130,44 @@
 (defun handle-command(msg connection)
   (if (contains-karma msg)
       (handle-karma msg connection)
-    (when (and (not (gethash (irc:source msg) *ignore-map*))
-	   (> (length (cadr (irc::arguments msg))) 1))
-      (progn
-	(flet ((notice (message) (irc:notice connection (irc:source msg) message)))
-	  (let ((cmd
-		 (let ((uncut-cmd (cadr (irc::arguments msg))))
-		   (if (botmessagep uncut-cmd)
-				    (let ((retval (botmessagep uncut-cmd)))
-				      (setf (irc:source msg) (botmessage-source uncut-cmd))
-				      (setf (cadr (irc:arguments msg)) retval)
-				      retval)
-				    uncut-cmd))))
-	    (when (and (> (length cmd) 1) (prefixedp cmd))
-	      (let* ((cmd-name (remove #\* (first-word (subseq cmd (length (prefixedp cmd))))))
-		     (cmd-file-name (format nil "user-commands/~(~a~).lisp"
-					    cmd-name)))
-		(if (and (probe-file cmd-file-name)
-			 (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
-		    (let ((fnsym 
-			   (fdefinition 
-			    (find-symbol 
-			   (common-lisp:string-upcase cmd-name) 
-			   'user-commands)))
-			(nick (irc:source msg)))
-		    (handler-case
-		     (authed-funcall nick fnsym msg connection)
-		     (flooped-command 
-		      ()(notice 
-			 (format nil "Invalid usage of command: ~a" 
-				 cmd-name)))
-		     (invalid-auth
-		      ()(notice
-			 (format nil "You are not God. You cannot call ~a"
-				 cmd-name)))))
-		(progn 
-		  (princ (cadr (irc::arguments msg)))
-		  (irc:notice connection (irc:source msg)
-			      (format nil "~a is not a valid command" cmd-name))))))))))))
+    (let ((cmd
+	   (let ((uncut-cmd (cadr (irc::arguments msg))))
+	     (if (botmessagep uncut-cmd)
+		 (let ((retval (botmessagep uncut-cmd)))
+		   (setf (irc:source msg) (botmessage-source uncut-cmd))
+		   (setf (cadr (irc:arguments msg)) retval)
+		   retval)
+	       uncut-cmd))))
+      (when (and (not (gethash (irc:source msg) *ignore-map*))
+		 (> (length (cadr (irc::arguments msg))) 1))
+	(progn
+	  (flet ((notice (message) (irc:notice connection (irc:source msg) message)))
+		(when (and (> (length cmd) 1) (prefixedp cmd))
+		  (let* ((cmd-name (remove #\* (first-word (subseq cmd (length (prefixedp cmd))))))
+			 (cmd-file-name (format nil "user-commands/~(~a~).lisp"
+						cmd-name)))
+		    (if (and (probe-file cmd-file-name)
+			     (find-symbol (common-lisp:string-upcase cmd-name) 'user-commands))
+			(let ((fnsym 
+			       (fdefinition 
+				(find-symbol 
+				 (common-lisp:string-upcase cmd-name) 
+				 'user-commands)))
+			      (nick (irc:source msg)))
+			  (handler-case
+			   (authed-funcall nick fnsym msg connection)
+			   (flooped-command 
+			    ()(notice 
+			       (format nil "Invalid usage of command: ~a" 
+				       cmd-name)))
+			   (invalid-auth
+			    ()(notice
+			       (format nil "You are not God. You cannot call ~a"
+				       cmd-name)))))
+		      (progn 
+			(princ (cadr (irc::arguments msg)))
+			(irc:notice connection (irc:source msg)
+				    (format nil "~a is not a valid command" cmd-name))))))))))))
 
 ;; this will walk the .lisp files in user-commands/
 ;; and attempt to load them.

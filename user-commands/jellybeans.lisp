@@ -36,3 +36,4 @@
 		(irc:source msg))))
     (irc:privmsg connection (get-destination msg) 
 		 (format nil "Jellybeans for ~a: ~d" name (get-jellybeans name)))))
+(export 'jellybeans)

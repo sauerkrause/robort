@@ -36,3 +36,4 @@
 		(irc:source msg))))
     (irc:privmsg connection (get-destination msg) 
 		 (format nil "Points for ~a: ~d" name (get-points name)))))
+(export 'points)

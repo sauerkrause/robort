@@ -93,7 +93,43 @@
     (if (and open close (< open close))
 	(subseq str (+ 2 close)))))
 
+(defun botmessage-source (str)
+  (let ((open (search "<" str))
+	(close (search ">" str)))
+    (if (and open close (< open close))
+	(subseq str (+ 1 open) close))))
+
+(defun contains-karma (msg)
+  (let ((text (cadr (irc:arguments msg))))
+    (or (search "++" text)
+	(search "--" text))))
+
+(defun karma-victim (msg)
+  (dolist (word (split-by-one-space (cadr (irc:arguments msg))))
+    (if (or (search "++" word)
+	    (search "--" word))
+	(return (subseq word 0 
+			(if (search "++" word)
+			    (search "++" word)
+			  (search "--" word)))))))
+
+(defun handle-karma (msg connection)
+  ;; do some stuff with ++ and --
+    (if (contains-karma msg)
+	(flet ((incr-or-decr-for (msg)
+				 (if (search "++" msg) 1 -1)))
+	      (let ((victim (karma-victim msg))
+		    (source (irc:source msg)))
+		(if (and victim source)
+		    (progn
+		      (user-commands::post-points
+		       victim
+		       (incr-or-decr-for (cadr (irc:arguments msg))))
+		      (user-commands::post-jellybeans source -1)))))))
+
 (defun handle-command(msg connection)
+  (if (contains-karma msg)
+      (handle-karma msg connection)
     (when (and (not (gethash (irc:source msg) *ignore-map*))
 	   (> (length (cadr (irc::arguments msg))) 1))
       (progn
@@ -101,7 +137,10 @@
 	  (let ((cmd
 		 (let ((uncut-cmd (cadr (irc::arguments msg))))
 		   (if (botmessagep uncut-cmd)
-				    (botmessagep uncut-cmd)
+				    (let ((retval (botmessagep uncut-cmd)))
+				      (setf (irc:source msg) (botmessage-source uncut-cmd))
+				      (setf (cadr (irc:arguments msg)) retval)
+				      retval)
 				    uncut-cmd))))
 	    (when (and (> (length cmd) 1) (prefixedp cmd))
 	      (let* ((cmd-name (remove #\* (first-word (subseq cmd (length (prefixedp cmd))))))
@@ -128,7 +167,7 @@
 		(progn 
 		  (princ (cadr (irc::arguments msg)))
 		  (irc:notice connection (irc:source msg)
-			      "No."))))))))))
+			      "No.")))))))))))
 
 ;; this will walk the .lisp files in user-commands/
 ;; and attempt to load them.

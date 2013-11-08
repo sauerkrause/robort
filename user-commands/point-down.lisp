@@ -25,7 +25,7 @@
   (drakma:http-request
    (format nil
 	   "http://localhost:8000/~a/points"
-	   (drakma:url-encode name))
+	   (do-urlencode:urlencode name))
    :method :post
    :parameters `(("number" . ,(write-to-string number)))))
 
@@ -33,7 +33,7 @@
   (drakma:http-request
    (format nil
 	   "http://localhost:8000/~a/jellybeans"
-	   (drakma:url-encode name))
+	   (do-urlencode:urlencode name))
    :method :post
    :parameters `(("number" . ,(write-to-string number)))))
 

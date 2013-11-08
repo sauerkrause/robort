@@ -41,3 +41,4 @@
   (let ((name (first (rest-words (cadr (irc:arguments msg))))))
     (post-jellybeans (irc:source msg) -1)
     (post-points name 1)))
+(export 'point-up)

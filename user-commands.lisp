@@ -128,7 +128,7 @@
 		(progn 
 		  (princ (cadr (irc::arguments msg)))
 		  (irc:notice connection (irc:source msg)
-			      (format nil "~a is not a valid command" cmd-name)))))))))))
+			      "No."))))))))))
 
 ;; this will walk the .lisp files in user-commands/
 ;; and attempt to load them.

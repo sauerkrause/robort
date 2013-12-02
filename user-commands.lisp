@@ -140,7 +140,12 @@
 	 (link (if term (user-commands::random-link-for-imgur-search term))))
     (irc:privmsg connection
 		 (user-commands::get-destination msg)
-		 (if link link ":("))))
+		 (if link link (format nil "No related pic found for #~a" term)))))
+
+(defun handle-kick (msg connection)
+  (irc:privmsg connection
+	       (user-commands::get-destination msg)
+	       (value-gandhi nil)))
 
 (defun handle-command(msg connection)
   (cond

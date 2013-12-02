@@ -145,7 +145,7 @@
 (defun handle-kick (msg connection)
   (irc:privmsg connection
 	       (user-commands::get-destination msg)
-	       (value-gandhi nil)))
+	       (user-commands::value-gandhi)))
 
 (defun handle-command(msg connection)
   (cond

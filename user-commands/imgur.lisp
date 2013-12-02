@@ -40,5 +40,5 @@
 	 (link (random-link-for-imgur-search term)))
     (irc:privmsg connection
 		 (get-destination msg)
-		 (if link link ":("))))
+		 (if link link (format nil "No related pic found for #~a" term)))))
 (export 'imgur)

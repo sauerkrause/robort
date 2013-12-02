@@ -23,7 +23,6 @@
     "Freedom is not worth having if it does not include the freedom to make mistakes."
     "Hate the sin, love the sinner."
     "I cannot teach you violence, as I do not myself believe in it. I can only teach you not to bow your heads before any one even at the cost of your life."
-    "In matters of conscience, the law of the majority has no place."
     "I want freedom for the full expression of my personality."
     "Honest disagreement is often a good sign of progress."
     "Honest differences are often a good sign of progress"

@@ -24,7 +24,11 @@
 (defun init-hooks (connection)
   (irc:remove-hooks connection 'irc::irc-privmsg-message)
   (irc:remove-hooks connection 'irc::irc-invite-message)
+  (irc:remove-hooks connection 'irc::irc-kick-message)
   ;; (irc:remove-hooks connection 'irc::ctcp-action-message)
+  (irc:add-hook connection 'irc::irc-kick-message
+		(lambda (msg)
+		  (user-command-helpers::handle-kick msg connection)))
   (irc:add-hook connection 'irc::irc-privmsg-message
 		(lambda (msg)
 		  (user-command-helpers::handle-command msg connection)))

@@ -1,0 +1,7 @@
+(asdf:operate 'asdf:load-op 'cl-irc)
+(asdf:operate 'asdf:load-op 'bordeaux-threads)
+(asdf:operate 'asdf:load-op 'trivial-shell)
+(asdf:operate 'asdf:load-op 'drakma)
+(asdf:operate 'asdf:load-op 'do-urlencode)
+(asdf:operate 'asdf:load-op 'cl-json)
+(asdf:operate 'asdf:load-op 'flexi-streams)

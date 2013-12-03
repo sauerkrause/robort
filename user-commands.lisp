@@ -33,6 +33,7 @@
 (in-package :user-command-helpers)
 
 (load "configs/identification.lisp")
+(load "user-commands/common.lisp")
 
 (define-condition flooped-command (error) nil)
 (define-condition invalid-auth (error) nil)
@@ -78,7 +79,8 @@
 	       (let ((command-prefix (subseq command 0 (length prefix))))
 		 (if (equalp command-prefix prefix)
 		     (setf ret-val prefix))
-		 robort::*prefixen*))))))
+		 robort::*prefixen*)))))
+      (declare (ignore prefix-results)))
     ret-val))
 
 (defun handle-invite (msg connection)
@@ -115,6 +117,7 @@
 
 (defun handle-karma (msg connection)
   ;; do some stuff with ++ and --
+  (declare (ignore connection))
     (if (contains-karma msg)
 	(flet ((incr-or-decr-for (msg)
 				 (if (search "++" msg) 1 -1)))

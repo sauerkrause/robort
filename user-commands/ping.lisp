@@ -16,7 +16,7 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 
 (defun ping (msg connection)
     (irc:privmsg connection (get-destination msg) "PONG!"))

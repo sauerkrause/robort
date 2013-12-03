@@ -16,7 +16,7 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 
 (defun hi (msg connection)
   (let* ((nickname (irc:source msg))

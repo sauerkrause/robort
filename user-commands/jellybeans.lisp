@@ -16,10 +16,10 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(require :do-urlencode)
-(require :drakma)
 
-(load "user-commands/common.lisp")
+
+
+
 
 (defun get-jellybeans (name)
   (let ((stream

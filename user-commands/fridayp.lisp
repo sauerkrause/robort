@@ -16,7 +16,7 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 (defparameter *day-names*
   '("Monday" "Tuesday" "Wednesday"
     "Thursday" "Friday" "Saturday"
@@ -26,6 +26,14 @@
   (multiple-value-bind
    (second minute hour date month year day-of-week dst-p tz)
    (get-decoded-time)
+   (declare (ignore second))
+   (declare (ignore minute))
+   (declare (ignore hour))
+   (declare (ignore date))
+   (declare (ignore month))
+   (declare (ignore year))
+   (declare (ignore dst-p))
+   (declare (ignore tz))
    (nth day-of-week *day-names*)))
 
 (define-literal fridayp (vector (lambda () 

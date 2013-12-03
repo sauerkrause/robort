@@ -16,7 +16,7 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 
 (defun list-commands (msg connection)
 	(let ((word-list nil))
@@ -33,6 +33,7 @@
 		(progn
 		  (map-symbols :user-commands
 			       (lambda (key value)
+				 (declare (ignorable value))
 				 (if (or
 				      (not
 				       (user-command-helpers::needs-auth

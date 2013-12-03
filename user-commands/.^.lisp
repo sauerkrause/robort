@@ -19,5 +19,7 @@
 (load "user-commands/common.lisp")
 
 (defun .^ (msg connection)
+  (declare (ignore msg)
+	   (ignore connection))
   ())
 (export '.^)

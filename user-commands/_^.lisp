@@ -16,8 +16,10 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 
 (defun _^ (msg connection)
+  (declare (ignore msg)
+	   (ignore connection))
   ())
 (export '_^)

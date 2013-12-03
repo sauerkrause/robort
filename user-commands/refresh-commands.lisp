@@ -18,10 +18,10 @@
 (in-package :user-commands)
 
 (defun refresh-commands (msg connection)
-  (progn
-    (format T "msg: ~a" msg)
-    (print "Refreshing commands")
-    (user-command-helpers::register-commands)))
+  (declare (ignore connection))
+  (format T "msg: ~a" msg)
+  (print "Refreshing commands")
+  (user-command-helpers::register-commands))
 
 (register-auth #'refresh-commands)
 (export 'refresh-commands)

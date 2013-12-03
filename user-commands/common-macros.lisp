@@ -14,7 +14,7 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
+
 
 (in-package :user-commands)
 
@@ -56,8 +56,7 @@
 (define-literal <symbol-name> <sequence of literals>)
 sequence of literals may be a sequence containing strings
 or thunks that return strings"
-  (with-gensyms (index-value
-                 list-values)
+  (with-gensyms (list-values)
                 `(progn
 		   (let ((,list-values ,values))
 		     (name-literal ,name ,list-values)

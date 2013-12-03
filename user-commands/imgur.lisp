@@ -1,11 +1,11 @@
 (in-package :user-commands)
-(require :cl-irc)
-(require :drakma)
-(require :do-urlencode)
-(require :cl-json)
-(require :flexi-streams)
+
+
+
+
+
 (load "configs/imgur-id.lisp")
-(load "user-commands/common.lisp")
+
 
 (defun imgur-required-headers ()
   '(("Authorization" . "Client-ID 091f8126f9a8c3c")))

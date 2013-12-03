@@ -15,7 +15,7 @@
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 
-(require :trivial-shell)
+
 
 (in-package :user-commands)
 
@@ -35,6 +35,8 @@
 					"git pull ~a ~a"
 					remote
 					branch))
+	  (declare (ignore status))
+	  (declare (ignore error-output))
 	(print output)
 	(irc:notice connection (irc:source msg) 
 		    output)

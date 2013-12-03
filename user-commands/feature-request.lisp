@@ -14,11 +14,11 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
+
 
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 
 (let ((feature-request-message "Check out ^source. GitHub supports filing issues. If you're feeling adventurous, pull requests are preferred. My creator learned Common Lisp and so can you!"))
   (defun feature-request (msg connection)

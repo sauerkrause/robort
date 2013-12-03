@@ -14,8 +14,8 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
-(require :cl-smtp)
+
+
 
 (in-package :user-commands)
 ;; Defines 
@@ -26,7 +26,7 @@
 ;; *username* string
 ;; *password* string
 (load "configs/email-conf.lisp")
-(load "user-commands/common.lisp")
+
 
 (defun email (msg connection)
   (flet ((reply (connection destination message)

@@ -18,6 +18,8 @@
 (in-package :user-commands)
 
 (defun quit (msg connection)
+  (declare (ignore msg)
+	   (ignore connection))
 	(cl-user::quit))
 
 (register-auth #'quit)

@@ -14,11 +14,11 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
+
 
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 
 (let ((about-message "I am an IRC bot derived from cl-irc. I don't have much real use other than as the base for mcbort."))
   (defun about (msg connection)

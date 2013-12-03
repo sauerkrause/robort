@@ -15,10 +15,10 @@
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 
-(require :trivial-shell)
+
 
 (in-package :user-commands)
-(load "user-commands/common.lisp")
+
 
 (defun fortune (msg connection)
 	(let* ((response (trivial-shell:shell-command "fortune -s"))

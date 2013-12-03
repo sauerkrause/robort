@@ -16,7 +16,7 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(load "user-commands/common.lisp")
+
 
 (define-literal gandhi 
   #("It is better to be violent, if there is violence in our hearts, than to put on the cloak of nonviolence to cover impotence."

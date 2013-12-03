@@ -19,8 +19,7 @@
   (:use :common-lisp :common-lisp-user))
 (in-package :robort)
 
-(require :cl-irc)
-
+(load "asdf-load.lisp")
 (load "settings.lisp")
 (load "common-defs.lisp")
 

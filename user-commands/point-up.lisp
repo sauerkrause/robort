@@ -16,11 +16,6 @@
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
 (in-package :user-commands)
 
-(require :do-urlencode)
-(require :drakma)
-
-(load "user-commands/common.lisp")
-
 (defun post-points (name number)
   (drakma:http-request
    (format nil
@@ -38,6 +33,7 @@
    :parameters `(("number" . ,(write-to-string number)))))
 
 (defun point-up (msg connection)
+  (declare (ignore connection))
   (let ((name (first (rest-words (cadr (irc:arguments msg))))))
     (post-jellybeans (irc:source msg) -1)
     (post-points name 1)))

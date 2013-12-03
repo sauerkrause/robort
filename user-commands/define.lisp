@@ -20,22 +20,22 @@
   (cadr (irc::arguments msg)))
 
 (defun define (msg connection)
-  (let ((nickname (irc:source msg))
-	(reply ""))
-    (progn
-      (let ((msg-list (rest-words (message-string msg))))
-	;; error out before attempting anything when we don't have the args
-	(progn 
-	  (when (< (length msg-list) 2)
-	    (error 'user-command-helpers::flooped-command))
-	  (let ((fname (first msg-list))
-		(fdef (rest msg-list)))
-	    ;; define the function and maybe write to a file.
-	    ())))
+  (let ((nickname (irc:source msg)))
+    (let ((msg-list (rest-words (message-string msg))))
+      ;; error out before attempting anything when we don't have the args
+      (progn 
+	(when (< (length msg-list) 2)
+	  (error 'user-command-helpers::flooped-command))
+	(let ((fname (first msg-list))
+	      (fdef (rest msg-list)))
+	  ;; define the function and maybe write to a file.
+	  (declare (ignore fname)
+		   (ignore fdef))
+	  ())))
       (irc:privmsg connection (get-destination msg)
 		   (format nil "~@[~a: ~]Defined!"
 			   (if (not (privmsgp msg))
-			       nickname))))))
+			       nickname)))))
 
 (user-command-helpers::register-auth #'define)
 

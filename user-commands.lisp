@@ -14,7 +14,6 @@
 
 ;;     You should have received a copy of the GNU General Public License
 ;;     along with Robort.  If not, see <http://www.gnu.org/licenses/>.
-(require :cl-irc)
 
 ;; need a package for these helpers separate from the user-commands
 (defpackage :user-command-helpers

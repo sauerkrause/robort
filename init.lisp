@@ -19,20 +19,29 @@
 (load "user-commands.lisp")
 (in-package :robort)
 
+
+(defun handle-join-message (msg)
+  (user-command-helpers::handle-join msg (irc:connection msg)))
+(defun handle-kick-message (msg)
+  (user-command-helpers::handle-kick msg (irc:connection msg)))
+(defun handle-privmsg-message (msg)
+  (user-command-helpers::handle-command msg (irc:connection msg)))
+(defun handle-invite-message (msg)
+  (user-command-helpers::handle-invite msg (irc:connection msg)))
+(defun handle-ping-message (msg)
+  (apply #'irc:pong (irc:connection msg) (irc:arguments msg)))
+
 (defun init-hooks (connection)
-  (irc:remove-hooks connection 'irc::irc-privmsg-message)
-  (irc:remove-hooks connection 'irc::irc-invite-message)
-  (irc:remove-hooks connection 'irc::irc-kick-message)
-  ;; (irc:remove-hooks connection 'irc::ctcp-action-message)
+  (irc:add-hook connection 'irc::irc-join-message
+		#'handle-join-message)
   (irc:add-hook connection 'irc::irc-kick-message
-		(lambda (msg)
-		  (user-command-helpers::handle-kick msg connection)))
+		#'handle-kick-message)
   (irc:add-hook connection 'irc::irc-privmsg-message
-		(lambda (msg)
-		  (user-command-helpers::handle-command msg connection)))
+		#'handle-privmsg-message)
   (irc:add-hook connection 'irc::irc-invite-message
-		(lambda (msg)
-		  (user-command-helpers::handle-invite msg connection))))
+		#'handle-invite-message)
+  (irc:add-hook connection 'irc::irc-ping-message
+		#'handle-ping-message))
 
 ;; Do anything that needs to be done prior to reading the loops here.
 (defun init (connection)
@@ -44,4 +53,4 @@
 
 ;; handy reinit command.
 (defun reinit (connection)
-  (init-hooks connection))
+  ())

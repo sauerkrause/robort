@@ -39,4 +39,4 @@
 (define-literal fridayp (vector (lambda () 
 				  (let 
 				      ((friday? (equal "Friday" (day-of-week))))
-				    (if friday? "T" "NIL")))))
+				    (if friday? "T" "()")))))

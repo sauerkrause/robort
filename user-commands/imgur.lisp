@@ -1,11 +1,6 @@
 (in-package :user-commands)
 
-
-
-
-
 (load "configs/imgur-id.lisp")
-
 
 (defun imgur-required-headers ()
   '(("Authorization" . "Client-ID 091f8126f9a8c3c")))
@@ -20,7 +15,9 @@
   (setf (flexi-streams:flexi-stream-external-format response) :utf-8)
   (let* ((json-out (cl-json:decode-json response))
 	 (image-objs (cdr (assoc :data json-out))))
+    (print json-out)
     (mapcar (lambda (item)
+	      (print (cdr (assoc :link item)))
 	      (format nil "~@[~a ~]~@[~a ~]~@[~a ~]" 
 		      (cdr (assoc :title item))
 		      (cdr (assoc :link item))
@@ -29,14 +26,19 @@
 
 (defun imgur-search-streamed (term)
   (let ((search-url (format nil "https://api.imgur.com/3/gallery/search?q=~a"
-			    (do-urlencode:urlencode term))))
+			    term)))
+    (print search-url)
     (drakma:http-request search-url :additional-headers (imgur-required-headers) :want-stream t)))
 
 (defun random-link-for-imgur-search (term)
   (random-item (links-for (imgur-search-streamed term))))
 
+(defun get-argument (msg)
+  (let ((words (rest-words (cadr (irc:arguments msg)))))
+    (format nil "~{~A~^+~}" words)))
+
 (defun imgur (msg connection)
-  (let* ((term (first (rest-words (cadr (irc:arguments msg)))))
+  (let* ((term (get-argument msg))
 	 (link (random-link-for-imgur-search term)))
     (irc:privmsg connection
 		 (get-destination msg)

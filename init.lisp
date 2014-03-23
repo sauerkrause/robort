@@ -53,4 +53,5 @@
 
 ;; handy reinit command.
 (defun reinit (connection)
+  (declare (ignore connection))
   ())

@@ -100,6 +100,11 @@
     (if (and open close (< open close))
 	(subseq str (+ 1 open) close))))
 
+(defun contains-url (msg)
+  (let ((text (cadr (irc:arguments msg))))
+    (or (search "http://" text)
+	(search "https://" text))))
+
 (defun contains-karma (msg)
   (let ((text (cadr (irc:arguments msg))))
     (or (search "++" text)
@@ -113,6 +118,18 @@
 			(if (search "++" word)
 			    (search "++" word)
 			  (search "--" word)))))))
+(defun extract-url (msg)
+  (dolist (word (split-by-one-space (cadr (irc:arguments msg))))
+    (print word)
+    (if (or (search "http://" word)
+	    (search "https://" word))
+	(return word))))
+
+(defun handle-url (msg connection)
+  (let ((url (extract-url msg)))
+    (print url)
+    (setf (cadr (irc:arguments msg)) (format nil "^tinyurl ~A" url))
+    (user-commands::tinyurl msg connection)))
 
 (defun handle-karma (msg connection)
   ;; do some stuff with ++ and --
@@ -144,14 +161,25 @@
 		 (user-commands::get-destination msg)
 		 (if link link (format nil "No related pic found for #~a" term)))))
 
+(defun handle-join (msg connection)
+  (print (irc:source msg))
+  (if (member (irc:source msg) robort::*known-folks* :test #'equal)
+      (progn
+	(irc:privmsg connection
+		     (user-commands::get-destination msg)
+		     "One of us!")
+	;; return nil to pass buck
+	nil)))
+
 (defun handle-kick (msg connection)
   (irc:privmsg connection
 	       (user-commands::get-destination msg)
 	       (user-commands::value-gandhi)))
 
-(defun handle-command(msg connection)
+(defun handle-command (msg connection)
   (cond
    ((contains-karma msg) (handle-karma msg connection))
+   ((contains-url msg) (handle-url msg connection))
    (t
     (let ((cmd
 	   (let ((uncut-cmd (cadr (irc::arguments msg))))
@@ -187,7 +215,7 @@
 					 cmd-name)))
 			     (invalid-auth
 			      ()(notice
-				 (format nil "You are not God. You cannot call ~a"
+				 (format nil "No ~a for you!"
 					 cmd-name)))))
 			(progn 
 			  (princ (cadr (irc::arguments msg)))
